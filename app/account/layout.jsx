@@ -13,7 +13,6 @@ import IconGroup from '@/public/icons/IconGroup';
 import IconLogOut from '@/public/icons/IconLogOut';
 import { setAuthenticated } from '@/redux/authSlice';
 import PageLoader from '@/components/PageLoader';
-import ProductSlider from '@/components/slider/ProductSlider';
 import request from '@/utils/hooks/request';
 import { JsonContext } from '@/context/jsonContext';
 import Cookies from 'js-cookie';
