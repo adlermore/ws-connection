@@ -1,15 +1,13 @@
 'use client';
 
-import React, { useContext, useRef } from 'react'
+import React, {useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { JsonContext } from '@/context/jsonContext';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/validation/registerSchema";
 import { register } from '@/redux/authSlice';
-import useOnClickOutside from '@/utils/hooks/useOnClickOutside';
-import IconClose from '@/public/icons/IconClose.jsx';
 import InputMask from "react-input-mask";
+import Link from 'next/link';
 
 
 function RegisterPopup() {
@@ -17,27 +15,10 @@ function RegisterPopup() {
   const ref = useRef();
   const dispatch = useDispatch();
 
-  const { status, error } = useSelector((state) => state.auth);
-
-  //Close Popup after outside click
-  useOnClickOutside(ref, () => {
-    if (document.body.classList.contains("register_opened")) {
-      closeRegister()
-    }
-  });
-
-  const closeRegister = () => {
-    document.body.style.overflow = "";
-    document.body.style.paddingRight = "";
-    document.body.classList.remove("register_opened");
-    const fixedElements = document.querySelectorAll('.fixed-element');
-    fixedElements.forEach(el => {
-      el.style.paddingRight = "";
-    });
-  }
+  const { status } = useSelector((state) => state.auth);
 
   //validation init
-  const { register: registerForm, reset, setError, handleSubmit: handleSubmitForm, formState: { errors: errorsRegister } } = useForm({
+  const { register: registerForm, reset, handleSubmit: handleSubmitForm, formState: { errors: errorsRegister } } = useForm({
     resolver: zodResolver(registerSchema)
   });
 
@@ -45,16 +26,16 @@ function RegisterPopup() {
   const registerSubmit = async (dataForm) => {
 
     const newData = {
-      first_name : dataForm.name.split(" ")[0],
-      last_name : dataForm.name.split(" ")[1] || '',
-      password : dataForm.password,
-      confirm_password : dataForm.password_confirmation,
+      first_name: dataForm.name.split(" ")[0],
+      last_name: dataForm.name.split(" ")[1] || '',
+      password: dataForm.password,
+      confirm_password: dataForm.password_confirmation,
       country: "armenia",
-      email : dataForm.email,
-      phone_number : dataForm.phone,
+      email: dataForm.email,
+      phone_number: dataForm.phone,
       role: "buyer"
     }
-    
+
     dispatch(register(newData));
     reset()
   };
@@ -64,17 +45,7 @@ function RegisterPopup() {
       <div className="popup_container mobile:h-fit mobile:overflow-x-hidden mobile:overflow-y-auto bg-[#F8F6F5] relative px-[60px] pt-[40px] pb-[30px] w-full max-w-[550px] z-30 mx-auto mobile:p-[30px]" ref={ref}>
         <div className="title_line w-full gap-10">
           <div className="popup_title text-[25px] uppercase mobile:text-xl">Create account</div>
-          <div className='mt-[20px] text-[17px] mobile:text-sm mobile:mt-15'>Sign in to view your order history an update your details</div>
-          <a
-            href="/#"
-            className="popup_close absolute right-[20px] top-[20px] cursor-pointer"
-            onClick={(e) => {
-              e.preventDefault();
-              closeRegister();
-            }}
-          >
-            <IconClose />
-          </a>
+          <div className='mt-[20px] text-[16px] mobile:text-sm mobile:mt-15'>Create free accoutn and save your time when making purchases</div>
         </div>
         <div className="register_form mt-[30px]">
           <form onSubmit={handleSubmitForm(registerSubmit)} className="w-full">
@@ -166,33 +137,13 @@ function RegisterPopup() {
             </div>
             <button
               type="submit"
-              className={
-                status === 'loading'
-                  ? " mt-[35px] !opacity-50 pointer-events-none [&>svg]:opacity-100 relative submit_btn h-[40px] w-full bg-[#0071DC] text-base font-semibold text-white duration-300 hover:opacity-70 mx-auto justify-center flex items-center"
-                  : " mt-[35px] relative [&>svg]:opacity-0 submit_btn h-[40px] w-full bg-siteCrem text-base font-semibold text-white duration-300 hover:opacity-70 mx-auto justify-center flex items-center"
-              }
+              className={`${status === "loading" ? 'pointer-events-none' : ''} mt-[35px] relative [&>svg]:opacity-0 submit_btn h-[40px] w-full bg-siteCrem text-base font-semibold text-white duration-300 hover:opacity-70 mx-auto justify-center flex items-center`}
             >
-              <svg
-                aria-hidden="true"
-                role="status"
-                className="absolute left-[calc(50%-10px)] inline mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                ></path>
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="#1C64F2"
-                ></path>
-              </svg>
-              {status === 'loading' ? "" : "Registration"}
+              {status === "loading" ? <span class="loader_spinner"></span> : " Login"}
             </button>
+            <div className="mt-[20px] flex items-center justify-center gap-[10px]">Already have an account,<Link href="/login" className='font-bold'>log In</Link></div>
           </form>
-        </div>  
+        </div>
       </div>
     </div>
   )
