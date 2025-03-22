@@ -1,12 +1,8 @@
 import Header from "@/components/layout/Header.jsx";
 import Footer from "@/components/layout/Footer.jsx";
-import LoginPopup from "./(auth)/components/login/LoginPopup";
-import RegisterPopup from "./(auth)/components/register/RegisterPopup";
 import { JsonContextProvider } from "@/context/jsonContext";
 import { Providers } from "../redux/providers";
 import { Toaster } from "react-hot-toast";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "@/styles/globals.scss";
 
 import { NextIntlClientProvider } from 'next-intl';
@@ -27,12 +23,10 @@ export default async function RootLayout({ children }) {
       <html lang={locale}>
         <body className="flex flex-col siteBody ">
           <NextIntlClientProvider messages={messages}>
-            <Toaster containerStyle={{ zIndex: 99999 }} position="bottom-right" />
+            <Toaster containerStyle={{ zIndex: 9999 }} position="bottom-right" />
             <Providers>
               <Header />
               <div className="flex-1 main-wrapper">{children}</div>
-              <LoginPopup />
-              <RegisterPopup />
               <Footer />
             </Providers>
           </NextIntlClientProvider>

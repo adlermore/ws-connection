@@ -3,7 +3,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { HeaderLinks } from '@/utils/routes';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import IconArrowBottom from '@/public/icons/IconArrowBottom';
 import IconArrowRight from '@/public/icons/IconArrowRight';
 
 function HeaderMenu({ isScrolled }) {
@@ -74,7 +73,8 @@ function HeaderMenu({ isScrolled }) {
           onMouseLeave={!isMobile ? handleMenuLeave : undefined}
         >
           <Link
-            href={`/categoryInner?category=${link.to}`}
+            // href={`/categoryInner?category=${link.to}`}
+            href='/'
             className={`${pathname === `/categoryInner?category=${link.to}` && ' pointer-events-none'} tablet:w-[calc(100%-16px)] laptop:text-[16px] flex justify-center items-center gap-[20px] laptop:text-center laptop:w-[350px] whitespace-nowrap laptop:font-bold laptop:text-black laptopHorizontal:text-sm text-white text-base `}
             onClick={(e) => {
               if (isMobile && link.subMenu) {
@@ -127,7 +127,6 @@ function HeaderMenu({ isScrolled }) {
           ) : null}
         </div>
       ))}
-
     </div>
   );
 }

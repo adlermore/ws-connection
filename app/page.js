@@ -21,7 +21,7 @@ export default function Home() {
     <div className="home_page">
        <div className="custom_container">
         <div className="mt-[50px] flex items-center justify-center">
-          <HomeSearch />
+
         </div>
       </div>
     </div>

@@ -72,7 +72,6 @@ a {
   padding: 0 20px;
 }
 
-
 .silverGradient {
   background: linear-gradient(0deg,
       #f7f8f8 0%,
@@ -86,6 +85,39 @@ a {
       #b6b6b6 98%,
       #afafae 100%);
 }
+
+.login_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 60px;
+  .login_popup{
+    position: relative;
+    pointer-events: all;
+    opacity: 1;
+    z-index: 1;
+    background: transparent;
+  }
+}
+
+.registration_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 60px;
+  .register_popup{
+    position: relative;
+    pointer-events: all;
+    opacity: 1;
+    z-index: 1;
+    background: transparent;
+  }
+}
+
+.main-wrapper{
+  padding-top: 150px;
+}
+
 
 .search_li {
   display: flex;
