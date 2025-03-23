@@ -7,10 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validation/loginSchema";
 import { login } from "@/redux/authSlice";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function LoginPopup() {
   const ref = useRef();
   const dispatch = useDispatch();
+  const router = useRouter();
   const [showPass, setShowPass] = useState(false);
 
   const { status } = useSelector((state) => state.auth);
@@ -28,7 +30,11 @@ function LoginPopup() {
 
   //sumbition Data
   const loginSubmit = async (dataForm) => {
-    dispatch(login(dataForm));
+    dispatch(login(dataForm)).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") {
+        router.push("/fixing");
+      }
+    });
     reset();
   };
 
@@ -113,7 +119,7 @@ function LoginPopup() {
               type="submit"
               className={`${status === "loading" ? 'pointer-events-none' : ''}  relative submit_btn h-[40px] w-full bg-siteCrem text-base font-semibold text-white duration-300 hover:opacity-70 mx-auto justify-center flex items-center`}
             >
-              {status === "loading" ? <span class="loader_spinner"></span> : " Login"}
+              {status === "loading" ? <span className="loader_spinner"></span> : " Login"}
             </button>
             <div className="mt-[20px] flex items-center justify-center gap-[20px]">Don't have an account ? <Link href="/register" className="font-bold">Register Now</Link></div>
           </form>

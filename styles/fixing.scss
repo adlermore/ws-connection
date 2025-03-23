@@ -1,0 +1,63 @@
+@import 'variables';
+@import 'mixins';
+@import 'extendsStart';
+@import 'extendsEnd';
+
+.fixing_section{
+
+	.table-container {
+		margin-top: 100px;
+		margin-bottom: 40px;
+		padding: 0;
+	}
+	
+	.table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+	.gram_th{
+		width: 160px;
+	}
+	.usd_th{
+		width: 320px;
+	}
+	tbody td{
+		font-size: 14px;
+	}
+	.table th,
+	.table td {
+		padding: 5px;
+		border: 1px solid #ccc;
+		text-align: center;
+	}
+	
+	.table th {
+		background-color: #d9c196;
+		color: black;
+	}
+	
+	.change {
+		color: green; /* For positive change */
+	}
+	
+	.grams-input {
+		width: 100px;
+		padding: 5px;
+		text-align: center;
+		background: transparent;
+		border: 1px solid black;
+		outline: none;
+	}
+	
+	.fix-button {
+		background-color: #d9c196;
+		border: none;
+		padding: 5px 10px;
+		cursor: pointer;
+	}
+	
+	.fix-button:hover {
+		background-color: #bfa773;
+	}
+	
+}

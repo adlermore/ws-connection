@@ -139,7 +139,7 @@ function RegisterPopup() {
               type="submit"
               className={`${status === "loading" ? 'pointer-events-none' : ''} mt-[35px] relative [&>svg]:opacity-0 submit_btn h-[40px] w-full bg-siteCrem text-base font-semibold text-white duration-300 hover:opacity-70 mx-auto justify-center flex items-center`}
             >
-              {status === "loading" ? <span class="loader_spinner"></span> : " Login"}
+              {status === "loading" ? <span className="loader_spinner"></span> : " Login"}
             </button>
             <div className="mt-[20px] flex items-center justify-center gap-[10px]">Already have an account,<Link href="/login" className='font-bold'>log In</Link></div>
           </form>

@@ -169,10 +169,8 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
-        toast.success("Login successful!");
-        document.body.style.overflow = "";
-        document.body.style.paddingRight = "";
-        document.body.classList.remove("login_opened");
+        toast.success("Login successful!"); 
+      
         const fixedElements = document.querySelectorAll(".fixed-element");
         fixedElements.forEach((el) => {
           el.style.paddingRight = "";
@@ -196,8 +194,6 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         toast.success("Registration successful!");
 
-        document.body.classList.remove("register_opened");
-        // document.body.classList.add("success_opened");
       })
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";

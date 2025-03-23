@@ -16,47 +16,6 @@ function AccountToggle() {
   const [dropActive, setDropActive] = useState(false);
   const accountRef = useRef();
   const dispatch = useDispatch();
-  
-  const detectScrollBarWidth = () => {
-    const documentWidth = document.documentElement.clientWidth;
-    const windowWidth = window.innerWidth;
-    const scrollBarWidth = windowWidth - documentWidth;
-    return scrollBarWidth;
-  };
-
-  //Login Popup Open
-  const loginPopupOpen = (e) => {
-    e.preventDefault();
-    const scrollBarWidth = detectScrollBarWidth();
-    document.body.style.overflow = "hidden";
-    if (scrollBarWidth > 0) {
-      document.body.style.paddingRight = `${scrollBarWidth}px`;
-    }
-    document.body.classList.add("login_opened");
-    const fixedElements = document.querySelectorAll(".fixed-element");
-    fixedElements.forEach((el) => {
-      el.style.paddingRight = `${scrollBarWidth}px`;
-    });
-
-    setDropActive(false);
-  };
-
-  //Registr Popup Open
-  const registerPopupOpen = (e) => {
-    e.preventDefault();
-    const scrollBarWidth = detectScrollBarWidth();
-    document.body.style.overflow = "hidden";
-    if (scrollBarWidth > 0) {
-      document.body.style.paddingRight = `${scrollBarWidth}px`;
-    }
-    document.body.classList.add("register_opened");
-    const fixedElements = document.querySelectorAll(".fixed-element");
-    fixedElements.forEach((el) => {
-      el.style.paddingRight = `${scrollBarWidth}px`;
-    });
-
-    setDropActive(false);
-  };
 
   // Handle logout
   const handleLogout = () => {
@@ -111,19 +70,17 @@ function AccountToggle() {
             <div className="drop_ist">
               <div className="drop_inner">
                 <div className="border-[#D3BA87] border-b-2 pb-[5px] borderSilver">
-                  My Account
+                  Account
                 </div>
                 <a
-                  href="/"
+                  href="/register"
                   className=" mt-[10px] whitespace-nowrap"
-                  onClick={(e) => registerPopupOpen(e)}
                 >
                   Create Account
                 </a>
                 <a
-                  href="/"
+                  href="/login"
                   className="mt-[10px]"
-                  onClick={(e) => loginPopupOpen(e)}
                 >
                   Sign In
                 </a>
