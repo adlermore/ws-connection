@@ -121,7 +121,7 @@ function LoginPopup() {
             >
               {status === "loading" ? <span className="loader_spinner"></span> : " Login"}
             </button>
-            <div className="mt-[20px] flex items-center justify-center gap-[20px]">Don't have an account ? <Link href="/register" className="font-bold">Register Now</Link></div>
+            <div className="mt-[20px] flex items-center justify-center gap-[20px]">Dont have an account ? <Link href="/register" className="font-bold">Register Now</Link></div>
           </form>
         </div>
       </div>

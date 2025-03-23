@@ -43,7 +43,7 @@ export default function AccountLayout({ children }) {
     const path = router.asPath;
     setActivePage(path);
     setPageName(getPageName(pathname));
-  }, [router.asPath]); 
+  }, [pathname]); 
 
 
   useEffect(()=>{

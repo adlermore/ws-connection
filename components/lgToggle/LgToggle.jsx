@@ -18,7 +18,7 @@ function LgToggle() {
       .find(row => row.startsWith('locale='))
       ?.split('=')[1] || 'en-US';       
     setActiveLg(locale);
-  }, []);
+  }, [setActiveLg]);
 
   const changeActiveLg = (e, item) => {
     e.preventDefault();
