@@ -36,17 +36,24 @@ function Fixing() {
     const data = JSON.parse(event.data);
     console.log('WebSocket data:', data);
     
-    // Assuming the WebSocket data has the same structure as the table
-    const updatedData = data.map(item => ({
-      id: item.id,
-      purity: item.purity,        // Assuming this field exists
-      buyPrice: item.buyPrice,    // Assuming this field exists
-      sellPrice: item.sellPrice,  // Assuming this field exists
-      change: item.change,        // Assuming this field exists
-      time: new Date().toLocaleTimeString(), // Use current time as an example
-      grams: 0,                   // Initialize with 0 grams
-      usd: 0.00                   // Initialize with 0.00 USD
-    }));
+    const parsedGrs = JSON.parse(data.grs);
+    const parsedLrs = JSON.parse(data.lrs);
+    
+    // Map through the lrs and combine the necessary details from grs
+    const updatedData = parsedLrs.slice(0,2).map((item) => {
+      const gr = parsedGrs[item.id]; // Find corresponding grs data by id
+      
+      return {
+        id: item.id,
+        buyPrice: item.buy,
+        sellPrice: item.sell,
+        change: item.difference,
+        purity: gr ? gr.today_price : null, // Get purity (today_price) from grs
+        time: new Date().toLocaleTimeString(), // Use current time as an example
+        grams: 0, // Initialize with 0 grams
+        usd: 0.00 // Initialize with 0.00 USD
+      };
+    });
 
     setTableData(updatedData);
   };
@@ -123,15 +130,13 @@ function Fixing() {
                       className="grams-input"
                     />
                   </td>
-                  <td>{`$ ${item.usd.toFixed(2)}`}</td>
+                  <td>{`$ ${item?.usd?.toFixed(2)}`}</td>
                   <td><button className="fix-button">FIX</button></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-
       </div>
     </div>
   )
