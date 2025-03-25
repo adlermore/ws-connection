@@ -36,26 +36,19 @@ function Fixing() {
     const data = JSON.parse(event.data);
     console.log('WebSocket data:', data);
     
-    const parsedGrs = JSON.parse(data.grs);
     const parsedLrs = JSON.parse(data.lrs);
-    
-    // Map through the lrs and combine the necessary details from grs
-    const updatedData = parsedLrs.slice(0,2).map((item) => {
-      const gr = parsedGrs[item.id]; // Find corresponding grs data by id
-      
-      return {
-        id: item.id,
-        buyPrice: item.buy,
-        sellPrice: item.sell,
-        change: item.difference,
-        purity: gr ? gr.today_price : null, // Get purity (today_price) from grs
-        time: new Date().toLocaleTimeString(), // Use current time as an example
-        grams: 0, // Initialize with 0 grams
-        usd: 0.00 // Initialize with 0.00 USD
-      };
-    });
+ 
+    const g999 = parsedLrs.find((item) => item.id === 1);
+    const g995 = parsedLrs.find((item) => item.id === 2);
 
-    setTableData(updatedData);
+    console.log('g999' , g999);
+    console.log('g995' , g995);
+    
+    setTableData([
+      {...tableData[0], buyPrice: g999.buy, sellPrice: g999.sell, change: g999.difference, time: new Date().toLocaleTimeString()},
+      {...tableData[1], buyPrice: g995.buy, sellPrice: g995.sell, change: g995.difference, time: new Date().toLocaleTimeString()}
+    ])
+
   };
 
 
