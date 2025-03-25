@@ -170,11 +170,6 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         toast.success("Login successful!"); 
-      
-        const fixedElements = document.querySelectorAll(".fixed-element");
-        fixedElements.forEach((el) => {
-          el.style.paddingRight = "";
-        });
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";        
@@ -199,8 +194,6 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.payload.detail || action.error.message;
         toast.error(`Registration failed: ${state.error}`);
-
-        document.body.classList.remove("register_opened");
       });
 
     // Logout handlers
