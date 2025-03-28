@@ -10,7 +10,7 @@ export function middleware(req) {
   if (!protectedRoutes.some((route) => url.pathname.startsWith(route))) {
     return NextResponse.next();
   }
-
+  
   // Redirect to login if no token for protected routes
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));

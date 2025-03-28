@@ -228,6 +228,8 @@ const authSlice = createSlice({
         state.error = action.payload || action.error.message;
         state.isAuthenticated = false;
         // toast.error(`Failed to fetch user data: ${state.error}`);
+        localStorage.removeItem("token");
+        Cookies.remove("token");
       });
   },
 });
