@@ -32,7 +32,7 @@ function LoginPopup() {
   const loginSubmit = async (dataForm) => {
     dispatch(login(dataForm)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
-        router.push("/fixing");
+        router.replace("/fixing");
       }
     });
     reset();

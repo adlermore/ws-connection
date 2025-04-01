@@ -19,38 +19,56 @@ function Fixing() {
     return `${dayOfWeek} ${day}.${month}.${year}`;
   };
 
+  // Separate state for grams
+  const [grams, setGrams] = useState({
+    1: 0,
+    2: 0,
+  });
+
+  // Separate state for USD calculation
+  const [usdValues, setUsdValues] = useState({
+    1: 0.00,
+    2: 0.00,
+  });
+
   const [tableData, setTableData] = useState([
-    { id: 1, purity: '999.9', buyPrice: '94.35', sellPrice: '94.85', change: '+1.10', time: '20:10:55', grams: 0, usd: 0.00 },
-    { id: 2, purity: '995', buyPrice: '93.85', sellPrice: '94.35', change: '+1.10', time: '20:10:55', grams: 0, usd: 0.00 },
+    { id: 1, purity: '999.9', buyPrice: '94.35', sellPrice: '94.85', change: '+1.10', time: '20:10:55' },
+    { id: 2, purity: '995', buyPrice: '93.85', sellPrice: '94.35', change: '+1.10', time: '20:10:55' },
   ]);
 
-  const handleInputChange = (id, value) => {
-    const updatedData = tableData.map(item =>
-      item.id === id ? { ...item, grams: value, usd: (value * item.sellPrice).toFixed(2) } : item
-    );
-    setTableData(updatedData);
-  };
+  const [loading, setLoading] = useState(true);
 
+  const handleGramsChange = (id, value) => {
+    // Update the grams state
+    setGrams((prevGrams) => ({
+      ...prevGrams,
+      [id]: value,
+    }));
+
+    // Update the USD state based on new grams
+    const selectedItem = tableData.find(item => item.id === id);
+    if (selectedItem) {
+      const newUsdValue = value * selectedItem.sellPrice;
+      setUsdValues((prevUsdValues) => ({
+        ...prevUsdValues,
+        [id]: newUsdValue,
+      }));
+    }
+  };
 
   const handleWebSocketMessage = (event) => {
     const data = JSON.parse(event.data);
-    console.log('WebSocket data:', data);
-    
     const parsedLrs = JSON.parse(data.lrs);
- 
+
     const g999 = parsedLrs.find((item) => item.id === 1);
     const g995 = parsedLrs.find((item) => item.id === 2);
 
-    console.log('g999' , g999);
-    console.log('g995' , g995);
-    
     setTableData([
-      {...tableData[0], buyPrice: g999.buy, sellPrice: g999.sell, change: g999.difference, time: new Date().toLocaleTimeString()},
-      {...tableData[1], buyPrice: g995.buy, sellPrice: g995.sell, change: g995.difference, time: new Date().toLocaleTimeString()}
-    ])
-
+      { ...tableData[0], buyPrice: g999.buy.toFixed(2), sellPrice: g999.sell.toFixed(2), change: g999.difference, time: new Date().toLocaleTimeString() },
+      { ...tableData[1], buyPrice: g995.buy.toFixed(2), sellPrice: g995.sell.toFixed(2), change: g995.difference, time: new Date().toLocaleTimeString() }
+    ]);
+    setLoading(false);
   };
-
 
   useEffect(() => {
     // Create a new WebSocket connection
@@ -64,7 +82,6 @@ function Fixing() {
       ws.close();
     };
   }, []);
-
 
   return (
     <div className='fixing_section'>
@@ -89,8 +106,6 @@ function Fixing() {
             <div className='mt-[10px]'>+37411111111</div>
           </div>
         </div>
-
-
         <div className="table-container">
           <table className="table">
             <thead>
@@ -106,7 +121,7 @@ function Fixing() {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className={loading ? 'skeleton_active' : ''}>
               {tableData.map(item => (
                 <tr key={item.id}>
                   <td>{item.id}</td>
@@ -118,12 +133,13 @@ function Fixing() {
                   <td>
                     <input
                       type="number"
-                      value={item.grams}
-                      onChange={(e) => handleInputChange(item.id, e.target.value)}
+                      value={grams[item.id]}
+                      onChange={(e) => handleGramsChange(item.id, e.target.value)}
                       className="grams-input"
+                      defaultValue='0'
                     />
                   </td>
-                  <td>{`$ ${item?.usd?.toFixed(2)}`}</td>
+                  <td>{`$ ${usdValues[item.id]?.toFixed(2) || 0.00}`}</td>
                   <td><button className="fix-button">FIX</button></td>
                 </tr>
               ))}

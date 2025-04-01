@@ -12,15 +12,13 @@ import { initializeAuth } from '@/redux/authSlice'
 import PriceToggle from '../priceToggle/PriceToggle'
 import SearchToggle from '../search/SearchToggle'
 import Image from 'next/image'
-import { initializeCart } from '@/redux/cartSlice'
-import { initializeWishlist } from '@/redux/wishlistSlice'
 import HeaderMenu from '../menu/HeaderMenu'
 
 function Header() {
 
   const dispatch = useDispatch();
   const pathname = usePathname();
-  const wishListItems = useSelector((state) => state.wishlist.items);
+
   const [isOpen, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
