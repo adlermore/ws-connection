@@ -96,7 +96,6 @@ function RegisterPopup() {
                   type="tel"
                   autoComplete="on"
                   className="form-control"
-                  defaultValue={''}
                 />
                 <p className="form_error text-xs absolute right-0 text-siteRed font-semibold duration-300 opacity-0">
                   {errorsRegister?.phone?.message}
