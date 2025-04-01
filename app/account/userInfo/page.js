@@ -70,7 +70,6 @@ export default function UserInfoPage() {
             <input
               placeholder="Enter name"
               autoComplete="on"
-              // defaultValue={user?.name.split(' ')[0]}
               className="form-control"
               name="name"
               {...userInfo("namefirst", { required: true, minLength: 5 })}
@@ -86,7 +85,6 @@ export default function UserInfoPage() {
             <input
               placeholder="Enter surname"
               autoComplete="on"
-              // defaultValue={user?.name.split(' ')[1]}
               className="form-control"
               name="name"
               {...userInfo("surname", { required: true, minLength: 5 })}
@@ -103,7 +101,6 @@ export default function UserInfoPage() {
               placeholder="Enter your email address"
               autoComplete="on"
               className="form-control"
-              defaultValue={user?.email}
               name="email"
               {...userInfo("email", {
                 required: true,
@@ -126,7 +123,6 @@ export default function UserInfoPage() {
               type="tel"
               autoComplete="on"
               className="form-control"
-              defaultValue={user?.phone}
               mask="(999)-999-999"
 
             />
