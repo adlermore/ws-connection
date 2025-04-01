@@ -1,9 +1,9 @@
 {
-  "name": "gold-center",
+  "name": "new-fixing",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env PORT=4000 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^3.6.0",
     "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^2.2.7",
+    "cross-env": "^7.0.3",
     "hamburger-react": "^2.5.1",
     "i18next": "^24.2.2",
     "js-cookie": "^3.0.5",
