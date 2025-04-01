@@ -13,7 +13,6 @@ function Login() {
     if (user) {
       router.push('fixing')
     }
-
   }, [router, user])
 
   return (

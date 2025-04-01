@@ -61,3 +61,28 @@
 	}
 	
 }
+
+// Modern DatePicker styling
+.datepicker-input {
+  border: 1px solid #ccc;
+  border-radius: 0px;
+  padding: 10px;
+  font-size: 16px;
+	width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+	outline: none;
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+}
+
+// React Select container adjustments
+.react-select__control {
+  border-radius: 8px !important;
+}
+.react-select__menu {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
