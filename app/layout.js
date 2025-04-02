@@ -25,9 +25,9 @@ export default async function RootLayout({ children }) {
           <NextIntlClientProvider messages={messages}>
             <Toaster containerStyle={{ zIndex: 9999 }} position="bottom-right" />
             <Providers>
-              {/* <Header /> */}
+              <Header />
               <div className="flex-1 main-wrapper">{children}</div>
-              {/* <Footer /> */}
+              <Footer />
             </Providers>
           </NextIntlClientProvider>
         </body>

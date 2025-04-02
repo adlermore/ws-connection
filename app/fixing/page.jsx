@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
 import "@/styles/fixing.scss"
 import fixingLogo from '@/public/images/fixing_logo.png'
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import SocketTable from '@/components/fixing/socketTable';
+import SocketTable from '@/components/fixing/SocketTable';
+import Locations from "@/components/fixing/Locations";
 
 function Fixing() {
 
@@ -21,6 +21,7 @@ function Fixing() {
   };
 
 
+
   return (
     <div className='fixing_section'>
       <div className='custom_container'>
@@ -29,7 +30,7 @@ function Fixing() {
           <div className='text-siteCrem text-[32px]'>24GCM005</div>
         </div>
         <div className='mt-[20px] flex justify-between items-center'>
-          {/* <div className='fixing_logo'>
+          <div className='fixing_logo'>
             <Image
               width={228}
               height={51}
@@ -38,13 +39,15 @@ function Fixing() {
               alt="Fixing Logo"
               priority={true}
             />
-          </div> */}
+          </div>
           <div className='user_info text-xl'>
             <div className='text-right'>{user?.firstname}</div>
             <div className='mt-[10px]'>+37411111111</div>
           </div>
         </div>
         <SocketTable />
+        <Locations />
+
       </div>
     </div>
   )

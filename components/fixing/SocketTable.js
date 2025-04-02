@@ -1,4 +1,5 @@
-'use Client'
+'use client'
+
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 
@@ -8,7 +9,6 @@ function SocketTable() {
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
-
 
     // Separate state for grams
     const [grams, setGrams] = useState({ 1: 0, 2: 0 });
@@ -60,7 +60,7 @@ function SocketTable() {
         return () => {
             ws.close();
         };
-    });
+    },[]);
 
     return (
         <div className="table-container">
