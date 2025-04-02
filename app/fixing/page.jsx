@@ -23,7 +23,7 @@ function Fixing() {
 
 
   return (
-    <div className='fixing_section'>
+    <div className='fixing_section pb-[60px]'>
       <div className='custom_container'>
         <div className='flex justify-between items-center'>
           <div className='today text-xl'>{getFormattedDate()}</div>

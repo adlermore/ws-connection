@@ -65,7 +65,7 @@ function Locations() {
   };
 
   return (
-    <div className="flex justify-between items-center mt-6 border-t pt-4 ">
+    <div className="flex justify-between location_section items-center mt-6 border-t pt-4">
     <div className='select-container max-w-[400px] w-full'>
       <label htmlFor="location-select">Select Location:</label>
       <Select
