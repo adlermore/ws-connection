@@ -1,66 +1,88 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
 
-function SocketTable() {
+function SocketTable({ discount }) {
 
     const [tableData, setTableData] = useState([
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
-
-    // Separate state for grams
     const [grams, setGrams] = useState({ 1: 0, 2: 0 });
-
-    // Separate state for USD calculation
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
+    const [fixLoading, setFixLoading] = useState({});
 
-    const handleGramsChange = (id, value) => {
-        // Update the grams state
-        setGrams((prevGrams) => ({
-            ...prevGrams,
-            [id]: value,
-        }));
 
-        // Update the USD state based on new grams
-        const selectedItem = tableData.find(item => item.id === id);
-        if (selectedItem) {
-            const newUsdValue = value * selectedItem.sellPrice;
-            setUsdValues((prevUsdValues) => ({
-                ...prevUsdValues,
-                [id]: newUsdValue,
-            }));
+    const lastUpdateTime = useRef(Date.now());
+    let ws = useRef(null);
+
+    const fetchLocalSocket = async () => {
+        try {
+            const response = await fetch('https://api.goldcenter.am/v1/rate/local_socket?month=1');
+            const { data } = await response.json();
+            setTableData([
+                { ...tableData[0], buyPrice: data[0].buy.toFixed(2), sellPrice: (data[0].sell - discount?.discount).toFixed(2), change: data[0].difference, time: new Date().toLocaleTimeString() },
+                { ...tableData[1], buyPrice: data[1].buy.toFixed(2), sellPrice: (data[1].sell - discount?.discount995).toFixed(2), change: data[1].difference, time: new Date().toLocaleTimeString() }
+            ]);
+            lastUpdateTime.current = Date.now();
+        } catch (error) {
+            console.error('Error fetching localSocket:', error);
         }
     };
 
-    const handleWebSocketMessage = (event) => {
-        const data = JSON.parse(event.data);
-        const parsedLrs = JSON.parse(data.lrs);
-
-        const g999 = parsedLrs.find((item) => item.id === 1);
-        const g995 = parsedLrs.find((item) => item.id === 2);
-
-        setTableData([
-            { ...tableData[0], buyPrice: g999.buy.toFixed(2), sellPrice: g999.sell.toFixed(2), change: g999.difference, time: new Date().toLocaleTimeString() },
-            { ...tableData[1], buyPrice: g995.buy.toFixed(2), sellPrice: g995.sell.toFixed(2), change: g995.difference, time: new Date().toLocaleTimeString() }
-        ]);
-        setLoading(false);
+    const handleGramsChange = (id, value) => {
+        setGrams((prev) => ({ ...prev, [id]: value }));
+        const selectedItem = tableData.find(item => item.id === id);
+        if (selectedItem) {
+            setUsdValues((prev) => ({ ...prev, [id]: value * selectedItem.sellPrice }));
+        }
     };
 
     useEffect(() => {
-        // Create a new WebSocket connection
-        const ws = new WebSocket('wss://api.goldcenter.am/v1/rate/vue-websocket');
+        fetchLocalSocket();
 
-        // Listen for WebSocket messages
-        ws.onmessage = handleWebSocketMessage;
-
-        // Cleanup the WebSocket connection when the component unmounts
-        return () => {
-            ws.close();
+        ws.current = new WebSocket('wss://api.goldcenter.am/v1/rate/vue-websocket');
+        ws.current.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const parsedLrs = JSON.parse(data.lrs);
+            setTableData([
+                { ...tableData[0], buyPrice: parsedLrs[0].buy.toFixed(2), sellPrice: (parsedLrs[0].sell - discount?.discount).toFixed(2), change: parsedLrs[0].difference, time: new Date().toLocaleTimeString() },
+                { ...tableData[1], buyPrice: parsedLrs[1].buy.toFixed(2), sellPrice: (parsedLrs[1].sell - discount?.discount995).toFixed(2), change: parsedLrs[1].difference, time: new Date().toLocaleTimeString() }
+            ]);
+            lastUpdateTime.current = Date.now();
+            setLoading(false);
         };
-    },[]);
+
+        const pingInterval = setInterval(() => {
+            if (ws.current.readyState === WebSocket.OPEN) {
+                ws.current.send(JSON.stringify({ type: 'ping' }));
+            }
+        }, 25000);
+
+        const checkDataInterval = setInterval(() => {
+            if (Date.now() - lastUpdateTime.current > 10000) {
+                fetchLocalSocket();
+            }
+        }, 10000);
+
+        return () => {
+            ws.current.close();
+            clearInterval(pingInterval);
+            clearInterval(checkDataInterval);
+        };
+    }, [discount]);
+
+    const handleFix = (id) => {
+        setFixLoading((prev) => ({ ...prev, [id]: true }));
+
+        setTimeout(() => {
+            setFixLoading((prev) => ({ ...prev, [id]: false })); 
+        }, 2000); 
+    };
+
+
 
     return (
         <div className="table-container">
@@ -96,7 +118,19 @@ function SocketTable() {
                                 />
                             </td>
                             <td>{`$ ${usdValues[item.id]?.toFixed(2) || 0.00}`}</td>
-                            <td><button className="fix-button">FIX</button></td>
+                            <td>
+                                <button
+                                    className={`fix-button ${fixLoading[item.id] ? 'disabled' : ''}`}
+                                    onClick={() => handleFix(item.id)}
+                                    disabled={fixLoading[item.id]}
+                                >
+                                    {fixLoading[item.id] ?
+                                        <span className='fix_loading'></span>
+                                        :
+                                        'FIX'
+                                    }
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
