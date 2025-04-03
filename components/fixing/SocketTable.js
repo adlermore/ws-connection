@@ -59,7 +59,7 @@ function SocketTable({ discount }) {
             if (ws.current.readyState === WebSocket.OPEN) {
                 ws.current.send(JSON.stringify({ type: 'ping' }));
             }
-        }, 25000);
+        }, 5000);
 
         const checkDataInterval = setInterval(() => {
             if (Date.now() - lastUpdateTime.current > 10000) {
