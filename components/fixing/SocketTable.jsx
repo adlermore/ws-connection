@@ -27,6 +27,7 @@ function SocketTable({ discount }) {
                 { ...tableData[1], buyPrice: data[1].buy.toFixed(2), sellPrice: (data[1].sell - discount?.discount995).toFixed(2), change: data[1].difference, time: new Date().toLocaleTimeString() }
             ]);
             lastUpdateTime.current = Date.now();
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching localSocket:', error);
         }
@@ -76,12 +77,17 @@ function SocketTable({ discount }) {
 
     const handleFix = (id) => {
         setFixLoading((prev) => ({ ...prev, [id]: true }));
-
+        
+        
+        console.log('ID' , id);
+        console.log('tableData' , tableData.find(item => item.id === id));
+        console.log('usdValues' , usdValues[id]);
+        console.log('grams' , grams[id]);
+    
         setTimeout(() => {
             setFixLoading((prev) => ({ ...prev, [id]: false })); 
         }, 2000); 
     };
-
 
 
     return (
@@ -100,7 +106,7 @@ function SocketTable({ discount }) {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody className={loading ? 'skeleton_active' : ''}>
+                <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
                     {tableData.map(item => (
                         <tr key={item.id}>
                             <td>{item.id}</td>
@@ -124,11 +130,7 @@ function SocketTable({ discount }) {
                                     onClick={() => handleFix(item.id)}
                                     disabled={fixLoading[item.id]}
                                 >
-                                    {fixLoading[item.id] ?
-                                        <span className='fix_loading'></span>
-                                        :
-                                        'FIX'
-                                    }
+                                    {fixLoading[item.id] ? <span className='fix_loading'></span> : 'FIX' }
                                 </button>
                             </td>
                         </tr>
