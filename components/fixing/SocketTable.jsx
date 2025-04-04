@@ -2,8 +2,11 @@
 
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react';
+import { request } from '../request';
+import toast from 'react-hot-toast';
+import { encryptAES } from '@/utils/hooks/encryptGenerate';
 
-function SocketTable({ discount }) {
+function SocketTable({ discount, userId }) {
 
     const [tableData, setTableData] = useState([
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
@@ -75,18 +78,44 @@ function SocketTable({ discount }) {
         };
     }, [discount]);
 
-    const handleFix = (id) => {
+    const handleFix = async (id) => {
         setFixLoading((prev) => ({ ...prev, [id]: true }));
-        
-        
-        console.log('ID' , id);
-        console.log('tableData' , tableData.find(item => item.id === id));
-        console.log('usdValues' , usdValues[id]);
-        console.log('grams' , grams[id]);
-    
-        setTimeout(() => {
-            setFixLoading((prev) => ({ ...prev, [id]: false })); 
-        }, 2000); 
+
+
+        // Usage example:
+        const key = '1234567890123456'; 
+        const textToEncrypt = '2025-04-03T10:00:00Z';
+
+        const { encryptedText, ivBase64 } = encryptAES(textToEncrypt, key);
+        console.log('Encrypted Text:', encryptedText);
+        console.log('IV Base64:', ivBase64);
+
+        const fixData = {
+            user_id: userId,
+            location: {
+                title: "ՄՈՒԼՏԻ ԳՈԼԴ-/Ս-72/",
+                value: 431
+            },
+            date: '',
+            grams999: id === 1 ? parseFloat(grams[1]) : 0,
+            grams995: id === 2 ? parseFloat(grams[2]) : 0,
+            price999: id === 1 ? parseFloat(usdValues[1]) : 0,
+            price995: id === 1 ? parseFloat(usdValues[2]) : 0,
+            remember: false
+        }
+
+        try {
+            const data = await request(`https://newapi.goldcenter.am/v1/preorder/calculate-amount`, 'POST', fixData);
+            if (data) {
+                console.log('data', data);
+                toast.success(`Test`, data);
+                setFixLoading((prev) => ({ ...prev, [id]: false }));
+            }
+        } catch (error) {
+            console.error('Error fetching user discount:', error);
+            setFixLoading((prev) => ({ ...prev, [id]: false }));
+        }
+
     };
 
 
@@ -130,7 +159,7 @@ function SocketTable({ discount }) {
                                     onClick={() => handleFix(item.id)}
                                     disabled={fixLoading[item.id]}
                                 >
-                                    {fixLoading[item.id] ? <span className='fix_loading'></span> : 'FIX' }
+                                    {fixLoading[item.id] ? <span className='fix_loading'></span> : 'FIX'}
                                 </button>
                             </td>
                         </tr>

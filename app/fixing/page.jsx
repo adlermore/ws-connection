@@ -68,7 +68,7 @@ function Fixing() {
             <div className='mt-[10px]'>+37411111111</div>
           </div>
         </div>
-        <SocketTable  discount={discount}/>
+        <SocketTable  discount={discount} userId={user?.user_id}/>
         <Locations />
       </div>
     </div>
