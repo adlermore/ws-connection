@@ -1,27 +1,40 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { request } from '../request';
+import { useDispatch } from 'react-redux';// Replace with your actual slice path
+import { setLocationData } from '@/redux/locationSlice';
 
 function Locations() {
+  const dispatch = useDispatch();
 
-  const [selectedDate, setSelectedDate] = useState(new Date()); // ✅ Already today's date
-  const [hours, setHours] = useState('00');
-  const [minutes, setMinutes] = useState('00');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [hours, setHours] = useState('');
+  const [minutes, setMinutes] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null); // ✅ New state for selected location
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
-  const hoursOptions = Array.from({ length: 24 }, (_, i) => ({
-    value: String(i).padStart(2, '0'),
-    label: String(i).padStart(2, '0'),
-  }));
+  const workingHourStart = 9;
+  const workingHourEnd = 18;
 
+  const hoursOptions = Array.from({ length: 24 }, (_, i) => {
+    const hourStr = String(i).padStart(2, '0');
+    const isDisabled = i < 9 || i > 18; // Example: working hours 09–18
+    return {
+      value: hourStr,
+      label: hourStr,
+      isDisabled,
+    };
+  });
+  
   const minutesOptions = Array.from({ length: 60 }, (_, i) => ({
     value: String(i).padStart(2, '0'),
     label: String(i).padStart(2, '0'),
+    isDisabled: hours === '' || hours === null, // Disable all minutes if no hour selected
   }));
+  
 
   const customSelectStyles = {
     control: (provided) => ({
@@ -31,7 +44,6 @@ function Locations() {
       borderRadius: '0px',
       padding: '5px',
       fontSize: '16px',
-      maxWidth: '300px',
       width: '100%',
       boxShadow: 'none',
       transition: 'all 0.3s ease',
@@ -41,11 +53,16 @@ function Locations() {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? '#d9c196' : '#fff',
-      color: state.isSelected ? '#fff' : '#333',
+      backgroundColor: state.isSelected
+        ? '#d9c196'
+        : state.isDisabled
+        ? '#f5f5f5'
+        : '#fff',
+      color: state.isDisabled ? '#999' : state.isSelected ? '#fff' : '#333',
+      cursor: state.isDisabled ? 'not-allowed' : 'pointer',
       '&:hover': {
-        backgroundColor: '#f0f8ff',
-        color: 'black',
+        backgroundColor: state.isDisabled ? '#f5f5f5' : '#f0f8ff',
+        color: state.isDisabled ? '#999' : 'black',
       },
     }),
     menu: (provided) => ({
@@ -58,6 +75,7 @@ function Locations() {
       color: '#333',
     }),
   };
+  
 
   const getLocations = async () => {
     try {
@@ -68,8 +86,6 @@ function Locations() {
           label: market.title || market.location,
         }));
         setLocationOptions(formattedOptions);
-
-        // ✅ Set default selected location to first option
         if (formattedOptions.length > 0) {
           setSelectedLocation(formattedOptions[0]);
         }
@@ -83,15 +99,28 @@ function Locations() {
     getLocations();
   }, []);
 
+  // Dispatch to Redux when any relevant value changes
+  useEffect(() => {
+    if (selectedLocation && hours && minutes) {
+      dispatch(
+        setLocationData({
+          location: selectedLocation,
+          hours,
+          minutes,
+        })
+      );
+    }
+  }, [selectedLocation, hours, minutes, dispatch]);
+
   return (
-    <div className="flex justify-between location_section items-center mt-6 border-t pt-4">
+    <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6">
       <div className='select-container max-w-[400px] w-full'>
         <label htmlFor="location-select">Select Location:</label>
         <Select
           id="location-select"
           options={locationOptions}
           value={selectedLocation}
-          onChange={(option) => setSelectedLocation(option)} // ✅ Controlled select
+          onChange={(option) => setSelectedLocation(option)}
           styles={customSelectStyles}
         />
       </div>
@@ -112,7 +141,10 @@ function Locations() {
           <Select
             options={hoursOptions}
             value={hoursOptions.find(option => option.value === hours)}
-            onChange={(selectedOption) => setHours(selectedOption.value)}
+            onChange={(selectedOption) => {
+              setHours(selectedOption.value);
+              setMinutes(''); // reset minutes on hour change
+            }}
             styles={customSelectStyles}
           />
           <Select
@@ -120,11 +152,12 @@ function Locations() {
             value={minutesOptions.find(option => option.value === minutes)}
             onChange={(selectedOption) => setMinutes(selectedOption.value)}
             styles={customSelectStyles}
+            isDisabled={!hours}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Locations;

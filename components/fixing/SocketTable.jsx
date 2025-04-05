@@ -5,6 +5,9 @@ import { useEffect } from 'react';
 import { request } from '../request';
 import toast from 'react-hot-toast';
 import { encryptAES } from '@/utils/hooks/encryptGenerate';
+import { useSelector } from 'react-redux';
+import { getLocationData } from '@/redux/locationSlice';
+
 
 function SocketTable({ discount, userId }) {
 
@@ -16,6 +19,8 @@ function SocketTable({ discount, userId }) {
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
     const [fixLoading, setFixLoading] = useState({});
+
+    const locationData = useSelector(getLocationData);
 
 
     const lastUpdateTime = useRef(Date.now());
@@ -78,17 +83,34 @@ function SocketTable({ discount, userId }) {
         };
     }, [discount]);
 
+    function getLocalISOTime() {
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+
+        const year = now.getFullYear();
+        const month = pad(now.getMonth() + 1);
+        const day = pad(now.getDate());
+        const hours = pad(now.getHours());
+        const minutes = pad(now.getMinutes());
+        const seconds = pad(now.getSeconds());
+
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+    }
+
+
     const handleFix = async (id) => {
+
+        if (grams[id] === 0 || grams[id] === '') {
+            toast.error('Please enter grams');
+            return 
+        } 
+
         setFixLoading((prev) => ({ ...prev, [id]: true }));
-
-
-        // Usage example:
-        const key = '1234567890123456'; 
-        const textToEncrypt = '2025-04-03T10:00:00Z';
+        
+        const key = '1234567890123456';
+        const textToEncrypt = getLocalISOTime();
 
         const { encryptedText, ivBase64 } = encryptAES(textToEncrypt, key);
-        console.log('Encrypted Text:', encryptedText);
-        console.log('IV Base64:', ivBase64);
 
         const fixData = {
             user_id: userId,
@@ -100,19 +122,24 @@ function SocketTable({ discount, userId }) {
             grams999: id === 1 ? parseFloat(grams[1]) : 0,
             grams995: id === 2 ? parseFloat(grams[2]) : 0,
             price999: id === 1 ? parseFloat(usdValues[1]) : 0,
-            price995: id === 1 ? parseFloat(usdValues[2]) : 0,
-            remember: false
+            price995: id === 2 ? parseFloat(usdValues[2]) : 0,
+            remember: false,
+            key: encryptedText,
+            iv: ivBase64,
         }
 
         try {
             const data = await request(`https://newapi.goldcenter.am/v1/preorder/calculate-amount`, 'POST', fixData);
             if (data) {
-                console.log('data', data);
-                toast.success(`Test`, data);
+                toast.success(`Successfully fixed ${grams[id]} grams of ${id === 1 ? '999' : '995'} purity gold`);
+                setGrams((prev) => ({ ...prev, [id]: 0 }));
+                setUsdValues((prev) => ({ ...prev, [id]: 0.00 }));
                 setFixLoading((prev) => ({ ...prev, [id]: false }));
             }
         } catch (error) {
             console.error('Error fetching user discount:', error);
+            setGrams((prev) => ({ ...prev, [id]: 0 }));
+            setUsdValues((prev) => ({ ...prev, [id]: 0.00 }));
             setFixLoading((prev) => ({ ...prev, [id]: false }));
         }
 
