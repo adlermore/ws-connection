@@ -11,8 +11,8 @@ export default function Home() {
   const lang = "en";
 
   useEffect(() => {
-    if (user === undefined ||  !user.role_id) return; 
-    if (user.role_id) {      
+    if (user === undefined ||  !user?.role_id) router.replace("/login"); 
+    if (user?.role_id) {      
       if (user.role_id !== 4) {
         const token = localStorage.getItem("token");
         if (token) {
