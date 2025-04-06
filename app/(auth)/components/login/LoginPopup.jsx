@@ -14,9 +14,9 @@ function LoginPopup() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [showPass, setShowPass] = useState(false);
-
+  const user = useSelector((state) => state.auth.user);
   const { status } = useSelector((state) => state.auth);
-
+  const lang = "en";
   //validation init
   const {
     register: loginForm,
@@ -32,7 +32,16 @@ function LoginPopup() {
   const loginSubmit = async (dataForm) => {
     dispatch(login(dataForm)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
-        router.replace("/fixing");
+        const roleId = res.payload?.role_id;
+        if (roleId !== 4) {
+          const token = localStorage.getItem("token");
+          if (token) {
+            window.location.href = `https://newadmin.goldcenter.am?token=${token}&lang=${lang}`;
+          }
+        }
+        else if (roleId) {
+          router.replace("/fixing");
+        }
       }
     });
     reset();

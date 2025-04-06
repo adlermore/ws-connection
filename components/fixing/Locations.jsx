@@ -7,10 +7,15 @@ import { request } from '../request';
 import { useDispatch } from 'react-redux';
 import { setLocationData } from '@/redux/locationSlice';
 import { format } from 'date-fns';
+import Cookies from 'js-cookie';
+import { setAuthenticated } from '@/redux/authSlice';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+
 
 function Locations() {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
@@ -22,20 +27,20 @@ function Locations() {
 
   const hoursOptions = Array.from({ length: 24 }, (_, i) => {
     const hourStr = String(i).padStart(2, '0');
-    const isDisabled = i < workingHourStart || i > workingHourEnd; 
+    const isDisabled = i < workingHourStart || i > workingHourEnd;
     return {
       value: hourStr,
       label: hourStr,
       isDisabled,
     };
   });
-  
+
   const minutesOptions = Array.from({ length: 60 }, (_, i) => ({
     value: String(i).padStart(2, '0'),
     label: String(i).padStart(2, '0'),
-    isDisabled: hours === '' || hours === null, 
+    isDisabled: hours === '' || hours === null,
   }));
-  
+
   const customSelectStyles = {
     control: (provided) => ({
       ...provided,
@@ -56,8 +61,8 @@ function Locations() {
       backgroundColor: state.isSelected
         ? '#d9c196'
         : state.isDisabled
-        ? '#f5f5f5'
-        : '#fff',
+          ? '#f5f5f5'
+          : '#fff',
       color: state.isDisabled ? '#999' : state.isSelected ? '#fff' : '#333',
       cursor: state.isDisabled ? 'not-allowed' : 'pointer',
       '&:hover': {
@@ -75,7 +80,7 @@ function Locations() {
       color: '#333',
     }),
   };
-  
+
 
   const getLocations = async () => {
     try {
@@ -90,8 +95,14 @@ function Locations() {
           setSelectedLocation(formattedOptions[0]);
         }
       }
+
     } catch (error) {
       console.error('Error fetching locations:', error);
+      dispatch(setAuthenticated(false));
+      localStorage.removeItem("token");
+      Cookies.remove("token");
+      toast.error('Session expired. Please log in again.');
+      router.refresh();
     }
   };
 
@@ -105,8 +116,8 @@ function Locations() {
       dispatch(
         setLocationData({
           location: selectedLocation,
-          hours: hours || '--', 
-          minutes ,
+          hours: hours || '--',
+          minutes,
           date: format(selectedDate, 'dd.MM.yyyy'),
         })
       );
@@ -143,7 +154,7 @@ function Locations() {
             value={hoursOptions.find(option => option.value === hours)}
             onChange={(selectedOption) => {
               setHours(selectedOption.value);
-              setMinutes(''); 
+              setMinutes('');
             }}
             styles={customSelectStyles}
           />

@@ -38,7 +38,7 @@ function OrderHistory({ userId }) {
 
   const fetchOrders = async (filterValue) => {
     setLoading(true);
-    let url = `https://api.goldcenter.am/v1/preorder/orders/completed?user_id=${userId}`;
+    let url = `https://newapi.goldcenter.am/v1/preorder/orders/completed?user_id=${userId}`;
 
     const dateRange = getDateRange(filterValue);
     if (dateRange) {
@@ -113,7 +113,6 @@ function OrderHistory({ userId }) {
           onChange={(selected) => setFilter(selected)}
         />
       </div>
-
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
