@@ -8,7 +8,29 @@ import SocketTable from '@/components/fixing/SocketTable';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from "react";
 import { request } from "@/components/request";
-const Locations = dynamic(() => import('@/components/fixing/Locations'), { ssr: false });
+import OrderHistory from "@/components/fixing/OrderHistory";
+
+const LocationLoading = () => (
+  <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6">
+  <div className='select-container max-w-[400px] w-full'>
+    <label htmlFor="location-select">Select Location:</label>
+      <div className="input_skeleton"></div>
+  </div>
+  <div className="datepicker-container max-w-[400px] w-full flex flex-col">
+    <label htmlFor="date-picker">Select Date:</label>
+    <div className="input_skeleton"></div>
+  </div>
+  <div className="time-select-container">
+    <label htmlFor="time-select">Time:</label>
+    <div className="flex space-x-2">
+      <div className="input_skeleton"></div>  
+      <div className="input_skeleton"></div>
+    </div>
+  </div>
+</div>
+);
+
+const Locations = dynamic(() => import('@/components/fixing/Locations'), { ssr: false, loading: () => <LocationLoading /> });
 
 function Fixing() {
 
@@ -44,7 +66,6 @@ function Fixing() {
     }
   }, [user])
 
-
   return (
     <div className='fixing_section pb-[20px]'>
       <div className='custom_container'>
@@ -64,12 +85,13 @@ function Fixing() {
             />
           </div>
           <div className='user_info text-xl'>
-            <div className='text-right'>{user?.firstname}</div>
+            <div className='text-right'>{user?.firstname || '...'}</div>
             <div className='mt-[10px]'>+37411111111</div>
           </div>
         </div>
         <Locations />
-        <SocketTable  discount={discount} userId={user?.user_id}/>
+        <SocketTable discount={discount} userId={user?.user_id} />
+        {user?.user_id && <OrderHistory userId={user?.user_id}/>}
       </div>
     </div>
   )

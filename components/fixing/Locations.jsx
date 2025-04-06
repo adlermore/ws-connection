@@ -4,8 +4,9 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { request } from '../request';
-import { useDispatch } from 'react-redux';// Replace with your actual slice path
+import { useDispatch } from 'react-redux';
 import { setLocationData } from '@/redux/locationSlice';
+import { format } from 'date-fns';
 
 function Locations() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function Locations() {
 
   const hoursOptions = Array.from({ length: 24 }, (_, i) => {
     const hourStr = String(i).padStart(2, '0');
-    const isDisabled = i < 9 || i > 18; // Example: working hours 09–18
+    const isDisabled = i < workingHourStart || i > workingHourEnd; 
     return {
       value: hourStr,
       label: hourStr,
@@ -32,10 +33,9 @@ function Locations() {
   const minutesOptions = Array.from({ length: 60 }, (_, i) => ({
     value: String(i).padStart(2, '0'),
     label: String(i).padStart(2, '0'),
-    isDisabled: hours === '' || hours === null, // Disable all minutes if no hour selected
+    isDisabled: hours === '' || hours === null, 
   }));
   
-
   const customSelectStyles = {
     control: (provided) => ({
       ...provided,
@@ -101,16 +101,17 @@ function Locations() {
 
   // Dispatch to Redux when any relevant value changes
   useEffect(() => {
-    if (selectedLocation && hours && minutes) {
+    if (selectedLocation || selectedDate || (hours && minutes)) {
       dispatch(
         setLocationData({
           location: selectedLocation,
-          hours,
-          minutes,
+          hours: hours || '--', 
+          minutes : minutes || '--',
+          date: format(selectedDate, 'dd.MM.yyyy'),
         })
       );
     }
-  }, [selectedLocation, hours, minutes, dispatch]);
+  }, [selectedLocation, hours, selectedDate, minutes, dispatch]);
 
   return (
     <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6">
@@ -124,17 +125,16 @@ function Locations() {
           styles={customSelectStyles}
         />
       </div>
-
       <div className="datepicker-container max-w-[400px] w-full flex flex-col">
         <label htmlFor="date-picker">Select Date:</label>
         <DatePicker
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
           dateFormat="dd.MM.yyyy"
+          calendarClassName="custom-calendar"
           className="datepicker-input w-full"
         />
       </div>
-
       <div className="time-select-container">
         <label htmlFor="time-select">Time:</label>
         <div className="flex space-x-2">
@@ -143,7 +143,7 @@ function Locations() {
             value={hoursOptions.find(option => option.value === hours)}
             onChange={(selectedOption) => {
               setHours(selectedOption.value);
-              setMinutes(''); // reset minutes on hour change
+              setMinutes(''); 
             }}
             styles={customSelectStyles}
           />

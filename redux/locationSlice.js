@@ -4,6 +4,7 @@ const initialState = {
   selectedLocation: null,
   selectedHour: '',
   selectedMinute: '',
+  date: ''
 };
 
 const locationSlice = createSlice({
@@ -14,11 +15,13 @@ const locationSlice = createSlice({
       state.selectedLocation = action.payload.location;
       state.selectedHour = action.payload.hours;
       state.selectedMinute = action.payload.minutes;
+      state.date = action.payload.date;
     },
     resetLocationData: (state) => {
       state.selectedLocation = null;
       state.selectedHour = '';
       state.selectedMinute = '';
+      state.date = '';
     },
   },
 });

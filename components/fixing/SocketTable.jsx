@@ -7,7 +7,10 @@ import toast from 'react-hot-toast';
 import { encryptAES } from '@/utils/hooks/encryptGenerate';
 import { useSelector } from 'react-redux';
 import { getLocationData } from '@/redux/locationSlice';
+import fixingLogo from '@/public/images/fixing_logo.png';
+import successLogo from '@/public/images/success_svg.png';
 
+import Image from 'next/image';
 
 function SocketTable({ discount, userId }) {
 
@@ -19,9 +22,9 @@ function SocketTable({ discount, userId }) {
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
     const [fixLoading, setFixLoading] = useState({});
+    const [successId, setSuccessId] = useState(null);
 
     const locationData = useSelector(getLocationData);
-
 
     const lastUpdateTime = useRef(Date.now());
     let ws = useRef(null);
@@ -31,11 +34,13 @@ function SocketTable({ discount, userId }) {
             const response = await fetch('https://api.goldcenter.am/v1/rate/local_socket?month=1');
             const { data } = await response.json();
             setTableData([
-                { ...tableData[0], buyPrice: data[0].buy.toFixed(2), sellPrice: (data[0].sell - discount?.discount).toFixed(2), change: data[0].difference, time: new Date().toLocaleTimeString() },
-                { ...tableData[1], buyPrice: data[1].buy.toFixed(2), sellPrice: (data[1].sell - discount?.discount995).toFixed(2), change: data[1].difference, time: new Date().toLocaleTimeString() }
+                { ...tableData[0], buyPrice: data[0].buy.toFixed(2), sellPrice: (data[0].sell - (discount?.discount || 0)).toFixed(2), change: data[0].difference, time: new Date().toLocaleTimeString() },
+                { ...tableData[1], buyPrice: data[1].buy.toFixed(2), sellPrice: (data[1].sell - (discount?.discount995 || 0)).toFixed(2), change: data[1].difference, time: new Date().toLocaleTimeString() }
             ]);
             lastUpdateTime.current = Date.now();
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
         } catch (error) {
             console.error('Error fetching localSocket:', error);
         }
@@ -61,7 +66,9 @@ function SocketTable({ discount, userId }) {
                 { ...tableData[1], buyPrice: parsedLrs[1].buy.toFixed(2), sellPrice: (parsedLrs[1].sell - discount?.discount995).toFixed(2), change: parsedLrs[1].difference, time: new Date().toLocaleTimeString() }
             ]);
             lastUpdateTime.current = Date.now();
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
         };
 
         const pingInterval = setInterval(() => {
@@ -97,16 +104,16 @@ function SocketTable({ discount, userId }) {
         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
     }
 
-
     const handleFix = async (id) => {
+
 
         if (grams[id] === 0 || grams[id] === '') {
             toast.error('Please enter grams');
-            return 
-        } 
+            return
+        }
 
         setFixLoading((prev) => ({ ...prev, [id]: true }));
-        
+
         const key = '1234567890123456';
         const textToEncrypt = getLocalISOTime();
 
@@ -115,10 +122,10 @@ function SocketTable({ discount, userId }) {
         const fixData = {
             user_id: userId,
             location: {
-                title: "ՄՈՒԼՏԻ ԳՈԼԴ-/Ս-72/",
-                value: 431
+                title: locationData.selectedLocation.label,
+                value: locationData.selectedLocation.value,
             },
-            date: '',
+            date: locationData.date || '',
             grams999: id === 1 ? parseFloat(grams[1]) : 0,
             grams995: id === 2 ? parseFloat(grams[2]) : 0,
             price999: id === 1 ? parseFloat(usdValues[1]) : 0,
@@ -131,20 +138,21 @@ function SocketTable({ discount, userId }) {
         try {
             const data = await request(`https://newapi.goldcenter.am/v1/preorder/calculate-amount`, 'POST', fixData);
             if (data) {
+                setSuccessId(id);
                 toast.success(`Successfully fixed ${grams[id]} grams of ${id === 1 ? '999' : '995'} purity gold`);
-                setGrams((prev) => ({ ...prev, [id]: 0 }));
-                setUsdValues((prev) => ({ ...prev, [id]: 0.00 }));
                 setFixLoading((prev) => ({ ...prev, [id]: false }));
             }
         } catch (error) {
             console.error('Error fetching user discount:', error);
-            setGrams((prev) => ({ ...prev, [id]: 0 }));
-            setUsdValues((prev) => ({ ...prev, [id]: 0.00 }));
             setFixLoading((prev) => ({ ...prev, [id]: false }));
         }
-
     };
 
+    const closePopup = () => {
+        setSuccessId(null);
+        setGrams({ 1: 0, 2: 0 });
+        setUsdValues({ 1: 0.00, 2: 0.00 });
+    }
 
     return (
         <div className="table-container">
@@ -193,6 +201,45 @@ function SocketTable({ discount, userId }) {
                     ))}
                 </tbody>
             </table>
+            <div className="mt-[20px] text-[20px]">
+                Book the above rates for 24 hours
+            </div>
+            {successId &&
+                <div className='success_popup'>
+                    <div className='popup_inner'>
+                        <div className='popup_image'>
+                            <Image
+                                width={228}
+                                height={53}
+                                src={fixingLogo}
+                                unoptimized={true}
+                                alt="Fixing Logo"
+                                priority={true}
+                            />
+                        </div>
+                        <div className='success_svg'>
+                            <Image
+                                width={190}
+                                height={35}
+                                src={successLogo}
+                                unoptimized={true}
+                                alt="Fixing Logo"
+                                priority={true}
+                            />
+                        </div>
+                        <div className='popup_content'>
+                            <span><b>ՇՆՈՐՀԱԿԱԼՈՒԹՅՈՒՆ</b></span>
+                            <p>Դուք պատվիրել եք՝ </p>
+                            <p><b>{grams[successId]}</b> գրամ <b>{tableData[successId - 1]?.purity}</b> ոսկի <b>{usdValues[successId]?.toFixed(2)}</b> փոխարժեքով</p>
+                            <p><b>{locationData.date}</b> ժամը <b>{locationData?.selectedHour + ':' + locationData?.selectedMinute}</b> ին:</p>
+                            <p>Վերապահված է 24 ժամով</p>
+                            <p><b>{locationData.selectedLocation?.label} </b>հասցեում</p>
+                            <p>ընդհանուր պարտքը՝ = <b>${usdValues[successId]}</b> դոլար</p>
+                        </div>
+                        <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>
+                    </div>
+                </div>
+            }
         </div>
     )
 }

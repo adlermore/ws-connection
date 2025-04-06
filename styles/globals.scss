@@ -72,23 +72,23 @@ a {
   padding: 0 20px;
 }
 
-.skeleton_active td{
+.skeleton_active td {
   opacity: 0;
 }
+
 :root {
-  --loading-grey: #e8e3e3;
+  --loading-grey: #e3e3e3;
 }
+
 .skeleton_active tr {
   background-color: var(--loading-grey);
-  background: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, .5) 50%,
-    rgba(255, 255, 255, 0) 60%
-  ) var(--loading-grey);
+  background: linear-gradient(100deg,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, .5) 50%,
+      rgba(255, 255, 255, 0) 60%) var(--loading-grey);
   background-size: 200% 100%;
   background-position-x: 180%;
-  animation: 1.5s loading ease-in-out infinite;
+  animation: 1s loading ease-in-out infinite;
 }
 
 @keyframes loading {
@@ -97,6 +97,19 @@ a {
   }
 }
 
+.input_skeleton {
+  width: 100%;
+  min-width: 125px;
+  height: 48px;
+  background-color: var(--loading-grey);
+  background: linear-gradient(100deg,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, .5) 50%,
+      rgba(255, 255, 255, 0) 60%) var(--loading-grey);
+  background-size: 200% 100%;
+  background-position-x: 180%;
+  animation: 0.8s loading ease-in-out infinite;
+}
 
 .silverGradient {
   background: linear-gradient(0deg,
@@ -117,7 +130,8 @@ a {
   align-items: center;
   justify-content: center;
   padding-bottom: 60px;
-  .login_popup{
+
+  .login_popup {
     position: relative;
     pointer-events: all;
     opacity: 1;
@@ -126,8 +140,13 @@ a {
   }
 }
 
-.location_section{
+.location_section {
   border-color: #cccccc;
+  min-height: 100px;
+}
+
+.location_sceleton {
+  min-height: 100px;
 }
 
 .fix_loading {
@@ -135,8 +154,9 @@ a {
   height: 28px;
   border-radius: 50%;
   position: relative;
-  animation: rotate 1s linear infinite
+  animation: rotate 0.8s linear infinite
 }
+
 .fix_loading::before {
   content: "";
   box-sizing: border-box;
@@ -144,23 +164,39 @@ a {
   inset: 0px;
   border-radius: 50%;
   border: 3px solid #FFF;
-  animation: prixClipFix 2s linear infinite ;
+  animation: prixClipFix 2s linear infinite;
 }
 
 @keyframes rotate {
-  100%   {transform: rotate(360deg)}
+  100% {
+    transform: rotate(360deg)
+  }
 }
 
 @keyframes prixClipFix {
-    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
-    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
-    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
-    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
-    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0)
+  }
+
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0)
+  }
+
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%)
+  }
+
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%)
+  }
+
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0)
+  }
 }
 
 
-.main_loading{
+.main_loading {
   position: fixed;
   left: 0;
   right: 0;
@@ -172,6 +208,7 @@ a {
   align-items: center;
   justify-content: center;
   transition: 0s !important;
+
   .page_spinner {
     width: 48px;
     height: 48px;
@@ -182,8 +219,9 @@ a {
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
   }
+
   .page_spinner::after {
-    content: '';  
+    content: '';
     box-sizing: border-box;
     position: absolute;
     left: 0;
@@ -195,14 +233,16 @@ a {
     border-bottom: 4px solid transparent;
     animation: rotation 0.5s linear infinite reverse;
   }
+
   @keyframes rotation {
     0% {
       transform: rotate(0deg);
     }
+
     100% {
       transform: rotate(360deg);
     }
-  } 
+  }
 }
 
 .loader_spinner {
@@ -212,6 +252,7 @@ a {
   position: relative;
   animation: rotate 1s linear infinite
 }
+
 .loader_spinner::before {
   content: "";
   box-sizing: border-box;
@@ -219,19 +260,35 @@ a {
   inset: 0px;
   border-radius: 50%;
   border: 3px solid #FFF;
-  animation: prixClipFix 2s linear infinite ;
+  animation: prixClipFix 2s linear infinite;
 }
 
 @keyframes rotate {
-  100%   {transform: rotate(360deg)}
+  100% {
+    transform: rotate(360deg)
+  }
 }
 
 @keyframes prixClipFix {
-    0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
-    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
-    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
-    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
-    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0)
+  }
+
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0)
+  }
+
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%)
+  }
+
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%)
+  }
+
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0)
+  }
 }
 
 .registration_page {
@@ -239,7 +296,8 @@ a {
   align-items: center;
   justify-content: center;
   padding-bottom: 60px;
-  .register_popup{
+
+  .register_popup {
     position: relative;
     pointer-events: all;
     opacity: 1;
@@ -248,7 +306,7 @@ a {
   }
 }
 
-.main-wrapper{
+.main-wrapper {
   padding-top: 150px;
 }
 
@@ -2407,7 +2465,7 @@ input::-webkit-inner-spin-button {
 
 @media (max-width: 768px) {
 
-  .account_section .account_line{
+  .account_section .account_line {
     margin-top: 20px;
     flex-direction: column;
   }
