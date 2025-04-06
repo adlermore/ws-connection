@@ -103,8 +103,8 @@ function OrderHistory({ userId }) {
   };
 
   return (
-    <div className='mt-[80px] mb-[80px]'>
-      <h2 className='text-center text-2xl'>COMPLETED ORDERS</h2>
+    <div className='mt-[80px] mb-[80px] mobile:mt-[40px] mobile:mb-[40px] order_history'>
+      <h2 className='text-center text-2xl mobile:text-xl'>COMPLETED ORDERS</h2>
       <div className='mx-auto max-w-[400px] mt-[30px] mb-[40px]'>
         <Select
           options={FILTER_OPTIONS}

@@ -2534,6 +2534,26 @@ input::-webkit-inner-spin-button {
 }
 
 @media (max-width: 575px) {
+  .login_page .login_popup{
+    height: auto;
+    min-height: 60dvh;
+  }
+  .success_popup {
+    padding: 20px;
+
+    .popup_inner {
+      padding: 15px;
+    }
+
+    .popup_image {
+      margin-top: 30px;
+    }
+
+    .popop_btn {
+      margin-top: 20px;
+    }
+  }
+
   .payment_method {
     padding-top: 20px;
   }
@@ -2632,6 +2652,21 @@ input::-webkit-inner-spin-button {
 
     .slick-dots {
       display: none !important;
+    }
+  }
+
+  .order_history {
+    .table thead tr {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .table tbody tr {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      td:last-child {
+        display: none;
+      }
     }
   }
 }

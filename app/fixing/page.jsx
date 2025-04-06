@@ -11,7 +11,7 @@ import { request } from "@/components/request";
 import OrderHistory from "@/components/fixing/OrderHistory";
 
 const LocationLoading = () => (
-  <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6">
+  <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6 gap-[10px]">
   <div className='select-container max-w-[400px] w-full'>
     <label htmlFor="location-select">Select Location:</label>
       <div className="input_skeleton"></div>
@@ -70,10 +70,10 @@ function Fixing() {
     <div className='fixing_section pb-[20px]'>
       <div className='custom_container'>
         <div className='flex justify-between items-center'>
-          <div className='today text-xl'>{getFormattedDate()}</div>
-          <div className='text-siteCrem text-[32px]'>24GCM005</div>
+          <div className='today text-xl tablet:text-[18px] mobile:text-sm'>{getFormattedDate()}</div>
+          <div className='text-siteCrem text-[32px] tablet:text-2xl mobile:text-xl'>24GCM005</div>
         </div>
-        <div className='mt-[20px] flex justify-between items-center'>
+        <div className='mt-[20px] flex justify-between mobile:gap-[20px] items-center'>
           <div className='fixing_logo'>
             <Image
               width={228}
@@ -84,7 +84,7 @@ function Fixing() {
               priority={true}
             />
           </div>
-          <div className='user_info text-xl'>
+          <div className='user_info text-xl tablet:text-[18px] mobile:text-[14px]'>
             <div className='text-right'>{user?.firstname || '...'}</div>
             <div className='mt-[10px]'>+37411111111</div>
           </div>

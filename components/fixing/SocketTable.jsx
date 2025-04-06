@@ -201,7 +201,7 @@ function SocketTable({ discount, userId }) {
                     ))}
                 </tbody>
             </table>
-            <div className="mt-[20px] text-[20px]">
+            <div className="mt-[20px] text-[20px] mobile:text-sm mobile:text-center">
                 Book the above rates for 24 hours
             </div>
             {successId &&
