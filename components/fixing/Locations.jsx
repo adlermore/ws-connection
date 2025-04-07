@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 
-function Locations() {
+function Locations({ modalMode }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -81,7 +81,6 @@ function Locations() {
     }),
   };
 
-
   const getLocations = async () => {
     try {
       const data = await request(`https://newapi.goldcenter.am/v1/preorder/locations`);
@@ -125,7 +124,7 @@ function Locations() {
   }, [selectedLocation, hours, selectedDate, minutes, dispatch]);
 
   return (
-    <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:grid  mobile:grid-cols-2 gap-[10px]">
+    <div className={`${modalMode ? 'modalMode' : ''} flex justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:grid  mobile:grid-cols-2 gap-[10px]`}>
       <div className='select-container max-w-[400px] w-full'>
         <label htmlFor="location-select">Select Location:</label>
         <Select
@@ -148,7 +147,7 @@ function Locations() {
       </div>
       <div className="time-select-container mobile:w-full mobile:col-span-2">
         <label htmlFor="time-select">Time:</label>
-        <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-2 mobile:gap-[15px] mobile:w-full">
+        <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-2 gap-[15px] mobile:w-full">
           <Select
             options={hoursOptions}
             value={hoursOptions.find(option => option.value === hours)}

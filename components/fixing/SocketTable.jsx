@@ -5,38 +5,66 @@ import { useEffect } from 'react';
 import { request } from '../request';
 import toast from 'react-hot-toast';
 import { encryptAES } from '@/utils/hooks/encryptGenerate';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getLocationData } from '@/redux/locationSlice';
 import fixingLogo from '@/public/images/fixing_logo.png';
 import successLogo from '@/public/images/success_svg.png';
 
 import Image from 'next/image';
+import { setFixedOrders } from '@/redux/fixedOrdersSlice';
 
 function SocketTable({ discount, userId }) {
+
+    const fixedOrders = useSelector(state => state.fixedOrders.orders);
+    const dispatch = useDispatch();
 
     const [tableData, setTableData] = useState([
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
+
     const [grams, setGrams] = useState({ 1: 0, 2: 0 });
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
     const [fixLoading, setFixLoading] = useState({});
     const [successId, setSuccessId] = useState(null);
+    const [yesterdayPrices, setYesterdayPrices] = useState([]);
 
     const locationData = useSelector(getLocationData);
 
     const lastUpdateTime = useRef(Date.now());
     let ws = useRef(null);
 
-    const fetchLocalSocket = async () => {
+    const getChangeSymbol = (todayPrice, yesterdayPrice) => {
+        if (todayPrice > yesterdayPrice) return `+${(todayPrice - yesterdayPrice).toFixed(2)}`;
+        if (todayPrice < yesterdayPrice) return `-${(yesterdayPrice - todayPrice).toFixed(2)}`;
+        return '0.00';
+    };
+
+    const fetchLocalSocket = async (yesterdayPricesData) => {
         try {
             const response = await fetch('https://api.goldcenter.am/v1/rate/local_socket?month=1');
             const { data } = await response.json();
-            setTableData([
-                { ...tableData[0], buyPrice: data[0].buy.toFixed(2), sellPrice: (data[0].sell - (discount?.discount || 0)).toFixed(2), change: data[0].difference, time: new Date().toLocaleTimeString() },
-                { ...tableData[1], buyPrice: data[1].buy.toFixed(2), sellPrice: (data[1].sell - (discount?.discount995 || 0)).toFixed(2), change: data[1].difference, time: new Date().toLocaleTimeString() }
-            ]);
+
+            if (!yesterdayPricesData) {
+                yesterdayPricesData = yesterdayPrices;
+            }
+            const updatedData = data.slice(0, 2).map((item, idx) => {
+                const yesterday = yesterdayPricesData.find(y => y.rate_id === idx + 1)
+
+                const sellPrice = item.sell - (idx === 0 ? discount?.discount || 0 : discount?.discount995 || 0);
+                const change = yesterday ? getChangeSymbol(sellPrice, yesterday.yesterday_sell_value) : '-';
+
+                return {
+                    ...tableData[idx],
+                    buyPrice: item.buy.toFixed(2),
+                    sellPrice: sellPrice.toFixed(2),
+                    change,
+                    time: new Date().toLocaleTimeString()
+                };
+            });
+
+            setTableData(updatedData);
             lastUpdateTime.current = Date.now();
             setTimeout(() => {
                 setLoading(false);
@@ -45,6 +73,7 @@ function SocketTable({ discount, userId }) {
             console.error('Error fetching localSocket:', error);
         }
     };
+
 
     const handleGramsChange = (id, value) => {
         setGrams((prev) => ({ ...prev, [id]: value }));
@@ -55,21 +84,41 @@ function SocketTable({ discount, userId }) {
     };
 
     useEffect(() => {
-        fetchLocalSocket();
+        const fetchYesterdayPrices = async () => {
+            const response = await fetch('https://api.goldcenter.am/v1/rate/local-yesterday-socket');
+            const data = await response.json();
+            setYesterdayPrices(data);
+            await fetchLocalSocket(data);
+        };
+
+        fetchYesterdayPrices();
 
         ws.current = new WebSocket('wss://api.goldcenter.am/v1/rate/vue-websocket');
         ws.current.onmessage = (event) => {
             const data = JSON.parse(event.data);
             const parsedLrs = JSON.parse(data.lrs);
-            setTableData([
-                { ...tableData[0], buyPrice: parsedLrs[0].buy.toFixed(2), sellPrice: (parsedLrs[0].sell - discount?.discount).toFixed(2), change: parsedLrs[0].difference, time: new Date().toLocaleTimeString() },
-                { ...tableData[1], buyPrice: parsedLrs[1].buy.toFixed(2), sellPrice: (parsedLrs[1].sell - discount?.discount995).toFixed(2), change: parsedLrs[1].difference, time: new Date().toLocaleTimeString() }
-            ]);
+
+            const updatedData = parsedLrs.map((item, idx) => {
+                const yesterday = yesterdayPrices.find(y => y.rate_id === idx + 1);
+                const sellPrice = item.sell - (idx === 0 ? discount?.discount || 0 : discount?.discount995 || 0);
+                const change = yesterday ? getChangeSymbol(sellPrice, yesterday.yesterday_sell_value) : '-';
+
+                return {
+                    ...tableData[idx],
+                    buyPrice: item.buy.toFixed(2),
+                    sellPrice: sellPrice.toFixed(2),
+                    change,
+                    time: new Date().toLocaleTimeString()
+                };
+            });
+
+            setTableData(updatedData);
             lastUpdateTime.current = Date.now();
             setTimeout(() => {
                 setLoading(false);
             }, 1000);
         };
+
 
         const pingInterval = setInterval(() => {
             if (ws.current.readyState === WebSocket.OPEN) {
@@ -140,6 +189,16 @@ function SocketTable({ discount, userId }) {
             if (data) {
                 setSuccessId(id);
                 toast.success(`Successfully fixed ${grams[id]} grams of ${id === 1 ? '999' : '995'} purity gold`);
+
+                const newOrder = {
+                    id: data?.Order?.id,
+                    location: fixData.location.title,
+                    date: fixData.date,
+                    time: getLocalISOTime().split('T')[1].slice(0, 5),
+                };
+
+                dispatch(setFixedOrders([...fixedOrders, newOrder]));
+
                 setFixLoading((prev) => ({ ...prev, [id]: false }));
             }
         } catch (error) {
@@ -171,7 +230,7 @@ function SocketTable({ discount, userId }) {
                     </tr>
                 </thead>
                 <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
-                    {tableData.map(item => (
+                    {tableData.slice(0, 2).map(item => (
                         <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.purity}</td>
@@ -201,9 +260,6 @@ function SocketTable({ discount, userId }) {
                     ))}
                 </tbody>
             </table>
-            <div className="mt-[20px] text-[20px] mobile:text-sm mobile:text-center">
-                Book the above rates for 24 hours
-            </div>
             {successId &&
                 <div className='success_popup'>
                     <div className='popup_inner'>
@@ -234,7 +290,7 @@ function SocketTable({ discount, userId }) {
                             <p><b>{locationData.date}</b> ժամը <b>{locationData?.selectedHour + ':' + locationData?.selectedMinute}</b> ին:</p>
                             <p>Վերապահված է 24 ժամով</p>
                             <p><b>{locationData.selectedLocation?.label} </b>հասցեում</p>
-                            <p>ընդհանուր պարտքը՝ = <b>${usdValues[successId]}</b> դոլար</p>
+                            <p>ընդհանուր պարտքը՝ = <b>${usdValues[successId].toFixed(2)}</b> դոլար</p>
                         </div>
                         <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>
                     </div>

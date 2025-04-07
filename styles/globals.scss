@@ -143,6 +143,19 @@ a {
 .location_section {
   border-color: #cccccc;
   min-height: 100px;
+  &.modalMode{
+    margin-top: 20px;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    > div:last-child{
+      grid-column-start: 1;
+      grid-column-end: 3;
+      .css-b62m3t-container , .css-3iigni-container{
+        flex: 1;
+      }
+    }
+  }
 }
 
 .location_sceleton {
