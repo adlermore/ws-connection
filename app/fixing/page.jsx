@@ -3,15 +3,13 @@
 import "@/styles/fixing.scss"
 import fixingLogo from '@/public/images/fixing_logo.png'
 import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import SocketTable from '@/components/fixing/SocketTable';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from "react";
 import { request } from "@/components/request";
 import OrderHistory from "@/components/fixing/OrderHistory";
-import Modal from "@/components/ui/Modal";
-import { updateFixedOrder } from "@/redux/fixedOrdersSlice";
-import toast from "react-hot-toast";
+import PendingsOrders from "@/components/fixing/PendingsOrders";
 
 const LocationLoading = () => (
   <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6 gap-[10px]">
@@ -40,14 +38,6 @@ function Fixing() {
   const user = useSelector((state) => state.auth.user);
   const [discount, setDiscount] = useState(null);
 
-
-  const fixedOrders = useSelector((state) => state.fixedOrders.orders);
-  const dispatch = useDispatch();
-
-  const [editingOrder, setEditingOrder] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const locationData = useSelector(state => state.location);
-
   const getUserDiscount = async (userId) => {
     try {
       const data = await request(`https://newapi.goldcenter.am/v1/preorder/prices?user_id=${userId}`);
@@ -75,38 +65,9 @@ function Fixing() {
     if (user) {
       getUserDiscount(user?.user_id)
     }
-
   }, [user])
 
 
-  const formatDateTime = (date, time) => {
-    const [day, month, year] = date.split('.');
-    const isoDateTime = `${year}-${month}-${day}T${time}:00+04:00`;
-    return isoDateTime;
-  };
-
-  const handleCHangeOrder = async (order) => {
-    
-    const formattedDateTime = formatDateTime(locationData?.date, `${locationData?.selectedHour}:${locationData?.selectedMinute}`);
-
-    if (!order || !locationData?.selectedMinute || !locationData?.selectedHour ) return;
-    const updatedOrder = await request('https://newapi.goldcenter.am/v1/preorder/change-order', 'POST', {
-      id: order.id,
-      location: {
-        title: locationData.selectedLocation.label,
-        value: locationData.selectedLocation.value,
-      },
-      date: formattedDateTime,
-    });
-
-    if (updatedOrder) {
-      dispatch(updateFixedOrder(updatedOrder.orders.find(itme => itme.id === order.id)));
-      setEditingOrder(null);
-      setShowModal(false);
-      toast.success('Order updated successfully');
-    }
-    
-  }
   return (
     <div className='fixing_section pb-[20px]'>
       <div className='custom_container'>
@@ -132,63 +93,7 @@ function Fixing() {
         </div>
         <SocketTable discount={discount} userId={user?.user_id} />
         <Locations />
-        <div className="mt-[50px] text-[20px] mobile:text-sm mobile:text-center">
-          Book the above rates for 24 hours
-        </div>
-        {fixedOrders.length > 0 &&
-          <div>
-            <div className="mt-[50px]">
-              <h2 className="text-[20px] font-semibold mb-4">Now Fixed Orders</h2>
-              <table className="w-full table now_ordered border border-gray-300">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="py-2 px-4 text-left">Location</th>
-                    <th className="py-2 px-4 text-left">Date</th>
-                    <th className="py-2 px-4 text-left">Time</th>
-                    <th className="py-2 px-4 text-left">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fixedOrders.map((order) => (
-                    <tr key={order.id} className="border-t">
-                      <td className="py-2 px-4">{order.location}</td>
-                      <td className="py-2 px-4">{order.date ||  new Date(order?.arrive_date).toISOString().split("T")[0]}</td>
-                      <td className="py-2 px-4">{order.time || new Date(order?.arrive_date).toTimeString().split(" ")[0]}</td>
-                      <td className="py-2 px-4">
-                        <button
-                          onClick={() => {
-                            setEditingOrder(order);
-                            setShowModal(true);
-                          }}
-                          className="text-blue-500 edit_button"
-                        >
-                          Edit
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        }
-        {showModal && (
-          <Modal title="Edit Fixed Order" onClose={() => setShowModal(false)}>
-            <Locations modalMode={true} />
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={async() => {
-                  if (!editingOrder) return;
-                  await handleCHangeOrder(editingOrder);
-                  // setShowModal(false);
-                }}
-                className="bg-siteCrem text-white px-4 py-2 rounded"
-              >
-                Save Changes
-              </button>
-            </div>
-          </Modal>
-        )}
+        <PendingsOrders userId={user?.user_id} />
         {user?.user_id && <OrderHistory userId={user?.user_id} />}
       </div>
     </div>

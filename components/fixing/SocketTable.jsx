@@ -1,27 +1,24 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useEffect } from 'react';
 import { request } from '../request';
 import toast from 'react-hot-toast';
 import { encryptAES } from '@/utils/hooks/encryptGenerate';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getLocationData } from '@/redux/locationSlice';
 import fixingLogo from '@/public/images/fixing_logo.png';
 import successLogo from '@/public/images/success_svg.png';
-
 import Image from 'next/image';
-import { setFixedOrders } from '@/redux/fixedOrdersSlice';
+import { JsonContext } from '@/context/jsonContext';
 
 function SocketTable({ discount, userId }) {
-
-    const fixedOrders = useSelector(state => state.fixedOrders.orders);
-    const dispatch = useDispatch();
 
     const [tableData, setTableData] = useState([
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
+    const { activeFix, setActiveFix } = useContext(JsonContext);
 
     const [grams, setGrams] = useState({ 1: 0, 2: 0 });
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
@@ -154,8 +151,6 @@ function SocketTable({ discount, userId }) {
     }
 
     const handleFix = async (id) => {
-
-
         if (grams[id] === 0 || grams[id] === '') {
             toast.error('Please enter grams');
             return
@@ -189,17 +184,8 @@ function SocketTable({ discount, userId }) {
             if (data) {
                 setSuccessId(id);
                 toast.success(`Successfully fixed ${grams[id]} grams of ${id === 1 ? '999' : '995'} purity gold`);
-
-                const newOrder = {
-                    id: data?.Order?.id,
-                    location: fixData.location.title,
-                    date: fixData.date,
-                    time: getLocalISOTime().split('T')[1].slice(0, 5),
-                };
-
-                dispatch(setFixedOrders([...fixedOrders, newOrder]));
-
                 setFixLoading((prev) => ({ ...prev, [id]: false }));
+                setActiveFix(!activeFix)
             }
         } catch (error) {
             console.error('Error fetching user discount:', error);

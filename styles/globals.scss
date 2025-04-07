@@ -140,18 +140,82 @@ a {
   }
 }
 
+.fixing_section .edit_button:hover {
+  background-color: #bfa773;
+}
+
+.fix_submit_btn {
+  cursor: pointer;
+  transition: 0.3s;
+  width: 200px;
+  height: 46px;
+  background: #d9c196;
+  color: white;
+  margin: 30px auto;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:disabled{
+    cursor: default;
+    opacity: 0.5 !important;
+  }
+  &:hover{
+    opacity: 0.7;
+  }
+}
+
+.amount_wrapper {
+  margin: 20px 0;
+
+  >div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+
+    span {
+      font-weight: 700;
+      font-family: 'system-ui';
+    }
+  }
+}
+
+.save_btn {
+  width: 130px;
+  height: 40px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  span {
+    width: 25px;
+    height: 25px;
+  }
+}
+
 .location_section {
   border-color: #cccccc;
   min-height: 100px;
-  &.modalMode{
+
+  &.modalMode {
     margin-top: 20px;
     padding-top: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    > div:last-child{
+
+    >div:last-child {
       grid-column-start: 1;
       grid-column-end: 3;
-      .css-b62m3t-container , .css-3iigni-container{
+
+      .css-b62m3t-container,
+      .css-3iigni-container {
         flex: 1;
       }
     }
@@ -2547,10 +2611,11 @@ input::-webkit-inner-spin-button {
 }
 
 @media (max-width: 575px) {
-  .login_page .login_popup{
+  .login_page .login_popup {
     height: auto;
     min-height: 60dvh;
   }
+
   .success_popup {
     padding: 20px;
 
@@ -2677,6 +2742,7 @@ input::-webkit-inner-spin-button {
     .table tbody tr {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
+
       td:last-child {
         display: none;
       }
