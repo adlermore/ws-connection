@@ -274,8 +274,10 @@ function SocketTable({ discount, userId }) {
                             <p>Դուք պատվիրել եք՝ </p>
                             <p><b>{grams[successId]}</b> գրամ <b>{tableData[successId - 1]?.purity}</b> ոսկի <b>{usdValues[successId]?.toFixed(2)}</b> փոխարժեքով</p>
                             <p><b>{locationData.date}</b> ժամը <b>{locationData?.selectedHour + ':' + locationData?.selectedMinute}</b> ին:</p>
+                            <br/>
                             <p>Վերապահված է 24 ժամով</p>
                             <p><b>{locationData.selectedLocation?.label} </b>հասցեում</p>
+                            <br/>
                             <p>ընդհանուր պարտքը՝ = <b>${usdValues[successId].toFixed(2)}</b> դոլար</p>
                         </div>
                         <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>

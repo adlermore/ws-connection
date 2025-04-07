@@ -122,7 +122,7 @@ function PendingsOrders({ userId }) {
 
   return (
     <>
-      <div className="mt-[50px] text-[20px] mobile:text-sm mobile:text-center text-center">
+      <div className="mt-[50px] text-[16px] mobile:text-sm mobile:text-center text-center">
         Ամրագրեք նշված գները 24 ժամվա համար մինչև
       </div>
       <div className="flex gap-[20px] items-center justify-center mt-[20px]">
@@ -146,7 +146,7 @@ function PendingsOrders({ userId }) {
         {pendingOrders.length > 0 && (
           <div>
             <div className="mt-[50px]">
-              <h2 className="text-[20px] font-semibold mb-4">Now Fixed Orders</h2>
+              <h2 className="text-[20px] font-semibold mb-4">PENDING ORDERS</h2>
               <table className="w-full table now_ordered border border-gray-300">
                 <thead className="bg-gray-100">
                   <tr>
