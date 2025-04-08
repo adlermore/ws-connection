@@ -135,7 +135,7 @@ function PendingsOrders({ userId }) {
           {getFormattedTime()}
         </div>
       </div>
-      <button className="fix_submit_btn" disabled={totalPrice === 0 || !totalPrice} onClick={handleBook}>Հաստատել</button>
+      {/* <button className="fix_submit_btn" disabled={totalPrice === 0 || !totalPrice} onClick={handleBook}>Հաստատել</button> */}
 
       <div className="mt-[40px] mb-[80px] mobile:mt-[40px] mobile:mb-[40px] order_history">
         <div className='amount_wrapper'>
