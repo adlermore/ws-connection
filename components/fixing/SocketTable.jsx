@@ -38,6 +38,19 @@ function SocketTable({ discount, userId }) {
         return '0.00';
     };
 
+    useEffect(() => {
+        // When prices change, recalculate USD values
+        const newUsdValues = {};
+        Object.keys(grams).forEach(id => {
+            const gram = parseFloat(grams[id]) || 0;
+            const item = tableData.find(i => i.id === parseInt(id));
+            if (item) {
+                newUsdValues[id] = gram * parseFloat(item.sellPrice || 0);
+            }
+        });
+        setUsdValues(newUsdValues);
+    }, [tableData]);
+    
     const fetchLocalSocket = async (yesterdayPricesData) => {
         try {
             const response = await fetch('https://api.goldcenter.am/v1/rate/local_socket?month=1');
@@ -73,6 +86,7 @@ function SocketTable({ discount, userId }) {
 
 
     const handleGramsChange = (id, value) => {
+        if (value === '00') return; 
         setGrams((prev) => ({ ...prev, [id]: value }));
         const selectedItem = tableData.find(item => item.id === id);
         if (selectedItem) {
@@ -227,7 +241,7 @@ function SocketTable({ discount, userId }) {
                             <td>
                                 <input
                                     type="number"
-                                    value={grams[item.id] ?? 0}
+                                    value={grams[item.id] ?? ''}
                                     onChange={(e) => handleGramsChange(item.id, e.target.value)}
                                     className="grams-input"
                                 />

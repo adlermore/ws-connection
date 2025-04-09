@@ -21,6 +21,7 @@ function Locations({ modalMode }) {
   const [minutes, setMinutes] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [rememberLocation, setRememberLocation] = useState(false);
 
   const workingHourStart = 9;
   const workingHourEnd = 18;
@@ -105,6 +106,24 @@ function Locations({ modalMode }) {
     }
   };
 
+  const getCurrentUserLocation = async () => {
+    try {
+      const data = await request('https://newapi.goldcenter.am/v1/preorder/current-user-location');
+      if (data && data.location_id) {
+        const defaultLocation = locationOptions.find(option => option.value === data.location_id);
+        if (defaultLocation) {
+          setSelectedLocation(defaultLocation);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching current user location:', error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUserLocation();
+  }, [locationOptions]);
+
   useEffect(() => {
     getLocations();
   }, []);
@@ -123,50 +142,70 @@ function Locations({ modalMode }) {
     }
   }, [selectedLocation, hours, selectedDate, minutes, dispatch]);
 
+  useEffect(() => {
+    if (rememberLocation) {
+      localStorage.setItem("selectedLocation", JSON.stringify(selectedLocation));
+    } else {
+      localStorage.removeItem("selectedLocation");
+    }
+  }, [rememberLocation, selectedLocation]);
+
   return (
-    <div className={`${modalMode ? 'modalMode' : ''} flex justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:grid  mobile:grid-cols-2 gap-[10px]`}>
-      <div className='select-container max-w-[400px] w-full'>
-        <label htmlFor="location-select">Select Location:</label>
-        <Select
-          id="location-select"
-          options={locationOptions}
-          value={selectedLocation}
-          onChange={(option) => setSelectedLocation(option)}
-          styles={customSelectStyles}
-        />
-      </div>
-      <div className="datepicker-container max-w-[400px] w-full flex flex-col">
-        <label htmlFor="date-picker">Select Date:</label>
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="dd.MM.yyyy"
-          calendarClassName="custom-calendar"
-          className="datepicker-input w-full"
-        />
-      </div>
-      <div className="time-select-container mobile:w-full mobile:col-span-2">
-        <label htmlFor="time-select">Time:</label>
-        <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-2 gap-[15px] mobile:w-full">
+    <>
+      <div className={`${modalMode ? 'modalMode' : ''} flex justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:grid  mobile:grid-cols-2 gap-[10px]`}>
+        <div className='select-container max-w-[400px] w-full'>
+          <label htmlFor="location-select">Select Location:</label>
           <Select
-            options={hoursOptions}
-            value={hoursOptions.find(option => option.value === hours)}
-            onChange={(selectedOption) => {
-              setHours(selectedOption.value);
-              setMinutes('');
-            }}
+            id="location-select"
+            options={locationOptions}
+            value={selectedLocation}
+            onChange={(option) => setSelectedLocation(option)}
             styles={customSelectStyles}
-          />
-          <Select
-            options={minutesOptions}
-            value={minutesOptions.find(option => option.value === minutes)}
-            onChange={(selectedOption) => setMinutes(selectedOption.value)}
-            styles={customSelectStyles}
-            isDisabled={!hours}
           />
         </div>
+        <div className="datepicker-container max-w-[400px] w-full flex flex-col">
+          <label htmlFor="date-picker">Select Date:</label>
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            dateFormat="dd.MM.yyyy"
+            calendarClassName="custom-calendar"
+            className="datepicker-input w-full"
+          />
+        </div>
+        <div className="time-select-container mobile:w-full mobile:col-span-2">
+          <label htmlFor="time-select">Time:</label>
+          <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-2 gap-[15px] mobile:w-full">
+            <Select
+              options={hoursOptions}
+              value={hoursOptions.find(option => option.value === hours)}
+              onChange={(selectedOption) => {
+                setHours(selectedOption.value);
+                setMinutes('');
+              }}
+              styles={customSelectStyles}
+            />
+            <Select
+              options={minutesOptions}
+              value={minutesOptions.find(option => option.value === minutes)}
+              onChange={(selectedOption) => setMinutes(selectedOption.value)}
+              styles={customSelectStyles}
+              isDisabled={!hours}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+      <div className="remember-location flex gap-[10px] mt-[5px]">
+        <input
+          type="checkbox"
+          checked={rememberLocation}
+          id='remimber_lavel'
+          className='cursor-pointer'
+          onChange={() => setRememberLocation(!rememberLocation)}
+        />
+        <label for="remimber_lavel" className='cursor-pointer'>Remember</label>
+      </div>
+    </>
   );
 }
 
