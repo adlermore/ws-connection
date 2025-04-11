@@ -19,6 +19,8 @@ function Login() {
         <LoginPopup />
       </div>
       <input type="date" />
+      <input type="time" />
+      <input type="datetime-local" />
     </>
 
   )
