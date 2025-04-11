@@ -18,6 +18,7 @@ function Login() {
       <div className='login_page'>
         <LoginPopup />
       </div>
+      <input type="date" />
     </>
 
   )
