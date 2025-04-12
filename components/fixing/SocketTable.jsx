@@ -168,8 +168,6 @@ function SocketTable({ discount, userId }) {
     }
 
     const handleFix = async (id) => {
-        console.log(' grams[id]' ,  grams[id]);
-        
         if (grams[id] === 0 || grams[id] === '' || grams[id] === '0' || !grams[id]  ) {
             toast.error('Please enter grams');
             return
@@ -220,7 +218,7 @@ function SocketTable({ discount, userId }) {
 
     return (
         <div className="table-container">
-            <table className="table">
+            <table className="table fix_table">
                 <thead>
                     <tr>
                         <th></th>

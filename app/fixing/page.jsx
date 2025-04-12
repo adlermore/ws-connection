@@ -12,20 +12,20 @@ import OrderHistory from "@/components/fixing/OrderHistory";
 import PendingsOrders from "@/components/fixing/PendingsOrders";
 
 const LocationLoading = () => (
-  <div className="flex justify-between location_section items-center mt-[50px] border-t pt-6 gap-[10px]">
-    <div className='select-container max-w-[400px] w-full'>
+  <div className="flex justify-between location_section mobile:block items-center mt-[50px] border-t pt-6 gap-[10px]">
+    <div className='select-container max-w-[400px] mobile:max-w-none w-full'>
       <label htmlFor="location-select">Select Location:</label>
       <div className="input_skeleton"></div>
     </div>
-    <div className="datepicker-container max-w-[400px] w-full flex flex-col">
+    <div className="datepicker-container max-w-[400px] mobile:max-w-none w-full flex flex-col">
       <label htmlFor="date-picker">Select Date:</label>
       <div className="input_skeleton"></div>
     </div>
     <div className="time-select-container">
       <label htmlFor="time-select">Time:</label>
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 mobile:space-x-0 mobile:block">
         <div className="input_skeleton"></div>
-        <div className="input_skeleton"></div>
+        <div className="input_skeleton mobile:hidden"></div>
       </div>
     </div>
   </div>

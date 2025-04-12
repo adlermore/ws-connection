@@ -1,12 +1,12 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { request } from '../request';
 import { useDispatch } from 'react-redux';
 import { setLocationData } from '@/redux/locationSlice';
-import { format, htmlFormat } from 'date-fns';
+import { format } from 'date-fns';
 import Cookies from 'js-cookie';
 import { setAuthenticated } from '@/redux/authSlice';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,8 @@ import toast from 'react-hot-toast';
 
 
 function Locations({ modalMode }) {
+  const timeRef = useRef(null);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -129,6 +131,16 @@ function Locations({ modalMode }) {
   }, []);
 
   useEffect(() => {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+
+    setHours(h);
+    setMinutes(m);
+  }, []);
+
+
+  useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -161,7 +173,7 @@ function Locations({ modalMode }) {
 
   return (
     <>
-      <div className={`${modalMode ? 'modalMode' : ''} flex location_wrapper justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:block gap-[10px]`}>
+      <div className={`${modalMode ? 'modalMode' : ''} flex location_wrapper justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:flex-col-reverse gap-[10px]`}>
         <div className='select-container max-w-[400px] mobile:max-w-none w-full'>
           <label htmlFor="location-select">Select Location:</label>
           <Select
@@ -172,7 +184,7 @@ function Locations({ modalMode }) {
             styles={customSelectStyles}
           />
         </div>
-        <div className="datepicker-container max-w-[400px] w-full mobile:max-w-none flex flex-col">
+        <div className="datepicker-container mobile:order-1 max-w-[400px] w-full mobile:max-w-none flex flex-col">
           <label htmlFor="date-picker">Select Date:</label>
           {isMobile ? (
             <input
@@ -206,7 +218,7 @@ function Locations({ modalMode }) {
                   setHours(h);
                   setMinutes(m);
                 }}
-                placeholder='Select Time'
+                placeholder="Select Time"
                 className="border timepicker border-gray-300 p-2 rounded w-full"
               />
             ) : (

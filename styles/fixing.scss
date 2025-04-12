@@ -3,7 +3,7 @@
 @import 'extendsStart';
 @import 'extendsEnd';
 
-*{
+* {
 	border: none;
 }
 
@@ -51,9 +51,10 @@
 	}
 
 	.now_ordered th,
-		.now_ordered td{
-			border: 1px solid #ccc;
+	.now_ordered td {
+		border: 1px solid #ccc;
 	}
+
 	.table th {
 		background-color: #0C1B20;
 		color: #E4DCCD;
@@ -110,6 +111,8 @@
 	cursor: pointer;
 	transition: all 0.3s ease;
 	outline: none;
+	appearance: none;
+	-webkit-appearance: none;
 
 	&:focus {
 		border-color: #007bff;
@@ -241,21 +244,61 @@
 
 @media (max-width: 575px) {
 
+	.fixing_section .grams-input {
+		height: 40px;
+	}
+
+	.location_section.modalMode {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+
+	.datepicker-input {
+		background: white;
+	}
+
+	.timepicker {
+		background: white;
+		appearance: none;
+		-webkit-appearance: none;
+		color: #000;
+	}
+
+	.timepicker:placeholder {
+		color: #999 !important;
+		font-size: 14px;
+	}
+
+	.fixing_section {
+		.custom_container {
+			padding: 0 10px;
+		}
+	}
+
 	.fixing_section .table-container {
 		margin-top: 40px;
 	}
 
 	.fixing_section .grams-input {
 		width: 100%;
+		border-radius: 0;
 	}
 
-	.fixing_section .table th,
-	.fixing_section .table td {
+	.fixing_section .table th {
+		font-size: 12px;
+		white-space: nowrap;
+		padding-right: 15px;
+	}
+
+	.fixing_section .fix_table td {
 		font-size: 14px;
 		white-space: nowrap;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	.table {
+	.table.fix_table {
 		thead tr {
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -276,11 +319,12 @@
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 			width: 100%;
-			padding-bottom: 10px;
+			padding-bottom: 15px;
 			border-bottom: 1px solid #ccc;
 
 			&:last-child {
 				border-bottom: none;
+				margin-top: 10px;
 			}
 
 			td {
@@ -306,35 +350,39 @@
 		.fix-button {
 			width: 100%;
 		}
-		&.now_ordered{
+
+		&.now_ordered {
 			border: none;
 			font-size: 12px;
+
 			thead tr {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 				width: 100%;
+
 				th {
 					border: none;
-					&:first-child{
+
+					&:first-child {
 						display: none;
 					}
 				}
 			}
-	
+
 			tbody tr {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 				width: 100%;
 				padding-bottom: 10px;
 				border-bottom: 1px solid #ccc !important;
-	
+
 				&:last-child {
 					border-bottom: none;
 				}
-	
+
 				td {
 					border: none !important;
-					
+
 					&:first-child {
 						white-space: wrap;
 						display: none;

@@ -64,9 +64,9 @@ function LoginPopup() {
   }
 
   return (
-    <div className="login_popup fixed  fixed-element left-0  top-0 right-0 bottom-0 flex items-center justify-center transition-[top]  pointer-events-none opacity-0 w-full h-full z-[9999] overflow-x-hidden overflow-y-auto bg-black bg-opacity-20 tablet:!p-20 tablet:h-[100dvh]">
+    <div className="login_popup fixed  fixed-element left-0  top-0 right-0 bottom-0 flex items-center justify-center transition-[top]  pointer-events-none opacity-0 w-full h-full z-[9999] overflow-x-hidden  bg-black bg-opacity-20 tablet:!p-20 tablet:h-[100dvh]">
       <div
-        className="popup_container mobile:h-fit mobile:overflow-x-hidden mobile:overflow-y-auto bg-[#F8F6F5] relative pt-40 px-[60px] pb-[25px] w-full max-w-[550px] z-30 mx-auto mobile:p-[30px]"
+        className="popup_container mobile:h-fit mobile:overflow-x-hidden bg-[#F8F6F5] relative pt-40 px-[60px] pb-[25px] w-full max-w-[550px] z-30 mx-auto mobile:p-[20px]"
         ref={ref}
       >
         <div className="title_line  w-full gap-10">

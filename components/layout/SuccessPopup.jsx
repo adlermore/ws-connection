@@ -17,7 +17,7 @@ function SuccessPopup() {
   });
 
   return (
-    <div className="success_popup fixed left-0  right-0 bottom-0 flex items-center justify-center pl-[17px] duration-500 transition-[top] top-[-100%] w-full h-full z-[999] overflow-x-hidden overflow-y-auto bg-blueDark2 bg-opacity-50 mobile:!p-20">
+    <div className="success_popup fixed left-0  right-0 bottom-0 flex items-center justify-center pl-[17px] duration-500 transition-[top] top-[-100%] w-full h-full z-[999] overflow-x-hidden bg-blueDark2 bg-opacity-50 mobile:!p-20">
       <div
         className="popup_container  bg-white relative p-20 w-full mobile:p-[15px] max-w-[380px] z-30 mx-auto"
         ref={ref}

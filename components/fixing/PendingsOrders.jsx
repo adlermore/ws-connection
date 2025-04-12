@@ -112,7 +112,6 @@ function PendingsOrders({ userId }) {
     try {
       const data = await request(`https://newapi.goldcenter.am/v1/preorder/pre-book-location`, 'POST', submitData);
       if (data) {
-        console.log('data____' , data);
         toast.success('Ձեր ժամադրությունը վերապահված է Ձեզ համար: Շնորհակալություն հաստատման համար')
       }
     } catch (error) {
@@ -137,7 +136,7 @@ function PendingsOrders({ userId }) {
       </div>
       {/* <button className="fix_submit_btn" disabled={totalPrice === 0 || !totalPrice} onClick={handleBook}>Հաստատել</button> */}
 
-      <div className="mt-[40px] mb-[80px] mobile:mt-[40px] mobile:mb-[40px] order_history">
+      <div className="mt-[40px] mb-[80px] mobile:mt-[40px] mobile:mb-[40px]">
         <div className='amount_wrapper'>
           <div>Ընդհանուր քաշը: <span>{totalGrams.toFixed(2)} գրամ</span></div>
           <div>Ընդհանուր գումարը:  <span>${totalPrice.toFixed(2)}</span></div>
@@ -147,52 +146,54 @@ function PendingsOrders({ userId }) {
           <div>
             <div className="mt-[50px]">
               <h2 className="text-[20px] font-semibold mb-4">PENDING ORDERS</h2>
-              <table className="w-full table now_ordered border border-gray-300">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="py-2 px-4 text-left"></th>
-                    <th className="py-2 px-4 text-left">PURITY</th>
-                    <th className="py-2 px-4 text-left">USD</th>
-                    <th className="py-2 px-4 text-left">Gram</th>
-                    <th className="py-2 px-4 text-left">Amount</th>
-                    <th className="py-2 px-4 text-left">Location</th>
-                    <th className="py-2 px-4 text-left">Date</th>
-                    <th className="py-2 px-4 text-left">Time</th>
-                    <th className="py-2 px-4 text-left">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
-                  {loading ? (
+              <div className="table-wrapper">
+                <table className="w-full table now_ordered border scroll-table border-gray-300">
+                  <thead className="bg-gray-100">
                     <tr>
-                      <td className="py-2 px-4"></td>
+                      <th className="py-2 px-4 text-left"></th>
+                      <th className="py-2 px-4 text-left">PURITY</th>
+                      <th className="py-2 px-4 text-left">USD</th>
+                      <th className="py-2 px-4 text-left">Gram</th>
+                      <th className="py-2 px-4 text-left">Amount</th>
+                      <th className="py-2 px-4 text-left">Location</th>
+                      <th className="py-2 px-4 text-left">Date</th>
+                      <th className="py-2 px-4 text-left">Time</th>
+                      <th className="py-2 px-4 text-left">Actions</th>
                     </tr>
-                  ) : (
-                    pendingOrders.map((order, i) => (
-                      <tr key={order.id} className="border-t">
-                        <td className="py-2 px-4">{i + 1}</td>
-                        <td className="py-2 px-4">{order.carat}</td>
-                        <td className="py-2 px-4">{(order.price / order.grams).toFixed(2)}</td>
-                        <td className="py-2 px-4">{order.grams.toFixed(2)}</td>
-                        <td className="py-2 px-4">{order.price.toFixed(2)}</td>
-                        <td className="py-2 px-4">{order.location}</td>
-                        <td className="py-2 px-4">{order.date || new Date(order.updated_at).toISOString().split('T')[0]}</td>
-                        <td className="py-2 px-4">{order.time || new Date(order.updated_at).toTimeString().split(' ')[0]}</td>
-                        <td className="py-2 px-4">
-                          <button
-                            onClick={() => {
-                              setEditingOrder(order);
-                              setShowModal(true);
-                            }}
-                            className="text-blue-500 edit_button"
-                          >
-                            Edit
-                          </button>
-                        </td>
+                  </thead>
+                  <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
+                    {loading ? (
+                      <tr>
+                        <td className="py-2 px-4"></td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      pendingOrders.map((order, i) => (
+                        <tr key={order.id} className="border-t">
+                          <td className="py-2 px-4">{i + 1}</td>
+                          <td className="py-2 px-4">{order.carat}</td>
+                          <td className="py-2 px-4">{(order.price / order.grams).toFixed(2)}</td>
+                          <td className="py-2 px-4">{order.grams.toFixed(2)}</td>
+                          <td className="py-2 px-4">{order.price.toFixed(2)}</td>
+                          <td className="py-2 px-4">{order.location}</td>
+                          <td className="py-2 px-4">{order.date || new Date(order.updated_at).toISOString().split('T')[0]}</td>
+                          <td className="py-2 px-4">{order.time || new Date(order.updated_at).toTimeString().split(' ')[0]}</td>
+                          <td className="py-2 px-4">
+                            <button
+                              onClick={() => {
+                                setEditingOrder(order);
+                                setShowModal(true);
+                              }}
+                              className="text-blue-500 edit_button"
+                            >
+                              Edit
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
