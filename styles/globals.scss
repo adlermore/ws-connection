@@ -156,11 +156,13 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  &:disabled{
+
+  &:disabled {
     cursor: default;
     opacity: 0.5 !important;
   }
-  &:hover{
+
+  &:hover {
     opacity: 0.7;
   }
 }
@@ -384,7 +386,7 @@ a {
 }
 
 .main-wrapper {
-  padding-top: 150px;
+  padding-top: 120px;
 }
 
 
@@ -2542,6 +2544,14 @@ input::-webkit-inner-spin-button {
 
 @media (max-width: 768px) {
 
+  .main-wrapper {
+    padding-top: 150px;
+  }
+
+  .login_page .login_popup {
+    height: auto;
+  }
+
   .account_section .account_line {
     margin-top: 20px;
     flex-direction: column;
@@ -2611,6 +2621,35 @@ input::-webkit-inner-spin-button {
 }
 
 @media (max-width: 575px) {
+
+  .header_wrapper {
+    position: relative;
+
+    .action_block {
+      top: 55px;
+    }
+  }
+
+  .main-wrapper {
+    padding-top: 85px;
+  }
+
+  .fixing_section {
+    .location_wrapper {
+      padding-top: 0;
+      >div{
+        margin-bottom: 20px;
+      }
+      input.timepicker{
+        border: 1px solid #cccccc;
+        border-radius: 0;
+        height: 48px;    
+        outline: none;
+      }
+    }
+
+  }
+
   .login_page .login_popup {
     height: auto;
     min-height: 60dvh;

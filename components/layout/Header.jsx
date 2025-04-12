@@ -3,16 +3,14 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Twirl as Hamburger } from "hamburger-react";
 import mainLogo from '@/public/images/newLogo.png'
 import AccountToggle from '../account/AccountToggle'
 import LgToggle from '../lgToggle/LgToggle'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { initializeAuth } from '@/redux/authSlice'
 import PriceToggle from '../priceToggle/PriceToggle'
 import SearchToggle from '../search/SearchToggle'
 import Image from 'next/image'
-import HeaderMenu from '../menu/HeaderMenu'
 
 function Header() {
 
@@ -20,14 +18,10 @@ function Header() {
   const pathname = usePathname();
 
   const [isOpen, setOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     if (document.body.classList.contains('menu_opened')) {
       setOpen(false)
-    }
-    if (window.scrollY > 10) {
-      setIsScrolled(true);
     }
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -39,31 +33,11 @@ function Header() {
 
     dispatch(initializeAuth());
 
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else if (pathname == '/') {
-        setIsScrolled(false);
-      }
-    };
-
-    if (pathname !== '/' || window.scrollY > 10) {
-      setIsScrolled(true);
-    } else {
-      setIsScrolled(false);
-    }
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-
   }, [isOpen, pathname, dispatch]);
 
 
   return (
-    <header className={`fixed fixed-element duration-500 transition-colors bg-[#0C1B20] top-0 h-[85px] tablet::h-[70px] left-0 right-0 z-[9999] laptop:bg-[#0C1B20]`}>
+    <header className={`fixed header_wrapper fixed-element duration-500 transition-colors bg-[#0C1B20] top-0 h-[85px] tablet::h-[70px] left-0 right-0 z-[9999] laptop:bg-[#0C1B20]`}>
       <div className='cover_container header_inner h-full justify-between flex items-center  gap-20 '  >
         <Link href='/' className='z-20 mobile:mx-auto'>
           <Image

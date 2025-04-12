@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { request } from '../request';
 import { useDispatch } from 'react-redux';
 import { setLocationData } from '@/redux/locationSlice';
-import { format } from 'date-fns';
+import { format, htmlFormat } from 'date-fns';
 import Cookies from 'js-cookie';
 import { setAuthenticated } from '@/redux/authSlice';
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,7 @@ function Locations({ modalMode }) {
   const [locationOptions, setLocationOptions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [rememberLocation, setRememberLocation] = useState(false);
-
+  const [isMobile, setIsMobile] = useState(false);
   const workingHourStart = 9;
   const workingHourEnd = 18;
 
@@ -128,6 +128,15 @@ function Locations({ modalMode }) {
     getLocations();
   }, []);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Dispatch to Redux when any relevant value changes
   useEffect(() => {
     if (selectedLocation || selectedDate || (hours && minutes)) {
@@ -152,8 +161,8 @@ function Locations({ modalMode }) {
 
   return (
     <>
-      <div className={`${modalMode ? 'modalMode' : ''} flex justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:grid  mobile:grid-cols-2 gap-[10px]`}>
-        <div className='select-container max-w-[400px] w-full'>
+      <div className={`${modalMode ? 'modalMode' : ''} flex location_wrapper justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:block gap-[10px]`}>
+        <div className='select-container max-w-[400px] mobile:max-w-none w-full'>
           <label htmlFor="location-select">Select Location:</label>
           <Select
             id="location-select"
@@ -163,35 +172,65 @@ function Locations({ modalMode }) {
             styles={customSelectStyles}
           />
         </div>
-        <div className="datepicker-container max-w-[400px] w-full flex flex-col">
+        <div className="datepicker-container max-w-[400px] w-full mobile:max-w-none flex flex-col">
           <label htmlFor="date-picker">Select Date:</label>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="dd.MM.yyyy"
-            calendarClassName="custom-calendar"
-            className="datepicker-input w-full"
-          />
-        </div>
-        <div className="time-select-container mobile:w-full mobile:col-span-2">
-          <label htmlFor="time-select">Time:</label>
-          <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-2 gap-[15px] mobile:w-full">
-            <Select
-              options={hoursOptions}
-              value={hoursOptions.find(option => option.value === hours)}
-              onChange={(selectedOption) => {
-                setHours(selectedOption.value);
-                setMinutes('');
+          {isMobile ? (
+            <input
+              type="date"
+              value={format(selectedDate, 'yyyy-MM-dd')}
+              onChange={(e) => {
+                const [year, month, day] = e.target.value.split('-');
+                setSelectedDate(new Date(year, month - 1, day));
               }}
-              styles={customSelectStyles}
+              className="datepicker-input w-full border border-gray-300 p-2 rounded"
             />
-            <Select
-              options={minutesOptions}
-              value={minutesOptions.find(option => option.value === minutes)}
-              onChange={(selectedOption) => setMinutes(selectedOption.value)}
-              styles={customSelectStyles}
-              isDisabled={!hours}
+          ) : (
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat="dd.MM.yyyy"
+              calendarClassName="custom-calendar"
+              className="datepicker-input w-full"
             />
+          )}
+        </div>
+        <div className="time-select-container mobile:w-full mobile:max-w-none mobile:col-span-1">
+          <label htmlFor="time-select">Time:</label>
+          <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-1 gap-[10px] mobile:w-full">
+            {isMobile ? (
+              <input
+                type="time"
+                value={`${hours}:${minutes}`}
+                onChange={(e) => {
+                  const [h, m] = e.target.value.split(':');
+                  setHours(h);
+                  setMinutes(m);
+                }}
+                placeholder='Select Time'
+                className="border timepicker border-gray-300 p-2 rounded w-full"
+              />
+            ) : (
+              <>
+                <Select
+                  placeholder={<div>Hour</div>}
+                  options={hoursOptions}
+                  value={hoursOptions.find(option => option.value === hours)}
+                  onChange={(selectedOption) => {
+                    setHours(selectedOption.value);
+                    setMinutes('');
+                  }}
+                  styles={customSelectStyles}
+                />
+                <Select
+                  placeholder={<div>Minute</div>}
+                  options={minutesOptions}
+                  value={minutesOptions.find(option => option.value === minutes)}
+                  onChange={(selectedOption) => setMinutes(selectedOption.value)}
+                  styles={customSelectStyles}
+                  isDisabled={!hours}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -203,7 +242,7 @@ function Locations({ modalMode }) {
           className='cursor-pointer'
           onChange={() => setRememberLocation(!rememberLocation)}
         />
-        <label for="remimber_lavel" className='cursor-pointer'>Remember</label>
+        <label htmlFor="remimber_lavel" className='cursor-pointer'>Remember</label>
       </div>
     </>
   );

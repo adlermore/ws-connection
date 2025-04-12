@@ -75,20 +75,20 @@ function Fixing() {
           <div className='today text-xl tablet:text-[18px] mobile:text-sm'>{getFormattedDate()}</div>
           <div className='text-siteCrem text-[32px] tablet:text-2xl mobile:text-xl'>24GCM005</div>
         </div>
-        <div className='mt-[20px] flex justify-between mobile:gap-[20px] items-center'>
+        <div className='mt-[20px] flex justify-between mobile:gap-[20px] items-center mobile:flex-col'>
           <div className='fixing_logo'>
             <Image
-              width={228}
-              height={51}
+              width={300}
+              height={65}
               src={fixingLogo}
               unoptimized={true}
               alt="Fixing Logo"
               priority={true}
             />
           </div>
-          <div className='user_info text-xl tablet:text-[18px] mobile:text-[14px]'>
+          <div className='user_info text-xl tablet:text-[18px] mobile:text-[14px] mobile:flex mobile:items-center mobile:gap-[15px]'>
             <div className='text-right'>{user?.firstname || '...'}</div>
-            <div className='mt-[10px]'>{user?.phone || '...'}</div>
+            <div className='mt-[10px] mobile:mt-0'>{user?.phone || '...'}</div>
           </div>
         </div>
         <SocketTable discount={discount} userId={user?.user_id} />

@@ -7,8 +7,8 @@ function Login() {
     <>
       <div className='fixing_log mx-auto flex justify-center mb-[40px]'>
         <Image
-          width={228}
-          height={51}
+          width={300}
+          height={65}
           src={fixingLogo}
           unoptimized={true}
           alt="Fixing Logo"
@@ -18,11 +18,7 @@ function Login() {
       <div className='login_page'>
         <LoginPopup />
       </div>
-      <input type="date" />
-      <input type="time" />
-      <input type="datetime-local" />
     </>
-
   )
 }
 

@@ -20,7 +20,7 @@ function SocketTable({ discount, userId }) {
     ]);
     const { activeFix, setActiveFix } = useContext(JsonContext);
 
-    const [grams, setGrams] = useState({ 1: 0, 2: 0 });
+    const [grams, setGrams] = useState({ 1: null, 2: null });
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
     const [fixLoading, setFixLoading] = useState({});
@@ -50,7 +50,7 @@ function SocketTable({ discount, userId }) {
         });
         setUsdValues(newUsdValues);
     }, [tableData]);
-    
+
     const fetchLocalSocket = async (yesterdayPricesData) => {
         try {
             const response = await fetch('https://api.goldcenter.am/v1/rate/local_socket?month=1');
@@ -86,7 +86,10 @@ function SocketTable({ discount, userId }) {
 
 
     const handleGramsChange = (id, value) => {
-        if (value === '00') return; 
+        if (value && value == '00') {
+            return
+        }
+
         setGrams((prev) => ({ ...prev, [id]: value }));
         const selectedItem = tableData.find(item => item.id === id);
         if (selectedItem) {
@@ -165,7 +168,9 @@ function SocketTable({ discount, userId }) {
     }
 
     const handleFix = async (id) => {
-        if (grams[id] === 0 || grams[id] === '') {
+        console.log(' grams[id]' ,  grams[id]);
+        
+        if (grams[id] === 0 || grams[id] === '' || grams[id] === '0' || !grams[id]  ) {
             toast.error('Please enter grams');
             return
         }
@@ -243,6 +248,7 @@ function SocketTable({ discount, userId }) {
                                     type="number"
                                     value={grams[item.id] ?? ''}
                                     onChange={(e) => handleGramsChange(item.id, e.target.value)}
+                                    placeholder='Enter Grams'
                                     className="grams-input"
                                 />
                             </td>
@@ -288,10 +294,10 @@ function SocketTable({ discount, userId }) {
                             <p>Դուք պատվիրել եք՝ </p>
                             <p><b>{grams[successId]}</b> գրամ <b>{tableData[successId - 1]?.purity}</b> ոսկի <b>{usdValues[successId]?.toFixed(2)}</b> փոխարժեքով</p>
                             <p><b>{locationData.date}</b> ժամը <b>{locationData?.selectedHour + ':' + locationData?.selectedMinute}</b> ին:</p>
-                            <br/>
+                            <br />
                             <p>Վերապահված է 24 ժամով</p>
                             <p><b>{locationData.selectedLocation?.label} </b>հասցեում</p>
-                            <br/>
+                            <br />
                             <p>ընդհանուր պարտքը՝ = <b>${usdValues[successId].toFixed(2)}</b> դոլար</p>
                         </div>
                         <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,15 +8,17 @@ import { loginSchema } from "@/validation/loginSchema";
 import { login } from "@/redux/authSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PageLoader from "@/components/PageLoader";
 
 function LoginPopup() {
   const ref = useRef();
   const dispatch = useDispatch();
   const router = useRouter();
   const [showPass, setShowPass] = useState(false);
-  const user = useSelector((state) => state.auth.user);
+  const [loading, setLoading] = useState(false);
   const { status } = useSelector((state) => state.auth);
   const lang = "en";
+
   //validation init
   const {
     register: loginForm,
@@ -26,7 +28,6 @@ function LoginPopup() {
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
-
 
   //sumbition Data
   const loginSubmit = async (dataForm) => {
@@ -40,6 +41,7 @@ function LoginPopup() {
           }
         }
         else if (roleId) {
+          setLoading(true)
           router.replace("/fixing");
         }
       }
@@ -47,9 +49,19 @@ function LoginPopup() {
     reset();
   };
 
+  useEffect(() => {
+    return () => {
+      setLoading(false)
+    };
+  }, [])
+
   const passToggle = () => {
     setShowPass(!showPass);
   };
+
+  if (loading) {
+    return <PageLoader />
+  }
 
   return (
     <div className="login_popup fixed  fixed-element left-0  top-0 right-0 bottom-0 flex items-center justify-center transition-[top]  pointer-events-none opacity-0 w-full h-full z-[9999] overflow-x-hidden overflow-y-auto bg-black bg-opacity-20 tablet:!p-20 tablet:h-[100dvh]">
