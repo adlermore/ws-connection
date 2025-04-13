@@ -82,8 +82,8 @@ function OrderHistory({ userId }) {
       backgroundColor: state.isSelected
         ? '#d9c196'
         : state.isDisabled
-        ? '#f5f5f5'
-        : '#fff',
+          ? '#f5f5f5'
+          : '#fff',
       color: state.isDisabled ? '#999' : state.isSelected ? '#fff' : '#333',
       cursor: state.isDisabled ? 'not-allowed' : 'pointer',
       '&:hover': {
@@ -116,32 +116,35 @@ function OrderHistory({ userId }) {
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
-        <table className='table' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Grams</th>
-              <th>Price</th>
-              <th>Carat</th>
-              <th>Status</th>
-              <th>Location</th>
-              <th>Created At</th>
-            </tr>
-          </thead>
-          <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.grams}</td>
-                <td>{order.price}</td>
-                <td>{order.carat}</td>
-                <td>{order.status}</td>
-                <td>{order.location}</td>
-                <td>{new Date(order.created_at).toLocaleString()}</td>
+        <div className='table-wrapper'>
+          <table className='table  scroll-table ' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Grams</th>
+                <th>Price</th>
+                <th>Carat</th>
+                <th>Status</th>
+                <th>Location</th>
+                <th>Created At</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.grams}</td>
+                  <td>{order.price}</td>
+                  <td>{order.carat}</td>
+                  <td>{order.status}</td>
+                  <td>{order.location}</td>
+                  <td>{new Date(order.created_at).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
       )}
     </div>
   );

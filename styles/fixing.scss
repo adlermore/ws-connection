@@ -87,7 +87,6 @@
 		position: relative;
 		padding: 0;
 		margin: 0 auto;
-
 		&.disabled {
 			opacity: 0.7;
 			pointer-events: none;
@@ -171,6 +170,9 @@
 	background-color: #93c5fd;
 }
 
+.fixed .remember-location{
+	display: none !important;
+}
 
 .success_popup {
 	position: fixed;

@@ -199,7 +199,7 @@ function PendingsOrders({ userId }) {
         )}
         {showModal && (
           <Modal title="Edit Fixed Order" onClose={() => setShowModal(false)}>
-            <Locations modalMode={true} />
+            <Locations modalMode={true} editingOrder={editingOrder} />
             <div className="flex justify-end mt-4">
               <button
                 onClick={async () => {

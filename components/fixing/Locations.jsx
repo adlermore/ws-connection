@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -13,8 +13,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 
-function Locations({ modalMode }) {
-  const timeRef = useRef(null);
+function Locations({ modalMode, editingOrder }) {
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -124,7 +123,7 @@ function Locations({ modalMode }) {
 
   useEffect(() => {
     getCurrentUserLocation();
-  }, [locationOptions]);
+  }, []);
 
   useEffect(() => {
     getLocations();
