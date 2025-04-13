@@ -2780,22 +2780,6 @@ input::-webkit-inner-spin-button {
       display: none !important;
     }
   }
-
-  .order_history {
-    .table thead tr {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    .table tbody tr {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-
-      td:last-child {
-        display: none;
-      }
-    }
-  }
 }
 
 @media (max-width: 767px) {
