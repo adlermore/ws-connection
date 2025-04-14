@@ -186,13 +186,29 @@ function Locations({ modalMode, editingOrder }) {
         <div className="datepicker-container mobile:order-1 max-w-[400px] w-full mobile:max-w-none flex flex-col">
           <label htmlFor="date-picker">Select Date:</label>
           {isMobile ? (
+            // <input
+            //   type="date"
+            //   value={format(selectedDate, 'yyyy-MM-dd')}
+            //   onChange={(e) => {
+            //     const [year, month, day] = e.target.value.split('-');
+            //     setSelectedDate(new Date(year, month - 1, day));
+            //   }}
+            //   className="datepicker-input w-full border border-gray-300 p-2 rounded"
+            // />
             <input
-              type="date"
-              value={format(selectedDate, 'yyyy-MM-dd')}
+              type="text"
+              value={format(selectedDate, 'dd.MM.yyyy')}
               onChange={(e) => {
-                const [year, month, day] = e.target.value.split('-');
-                setSelectedDate(new Date(year, month - 1, day));
+                const [day, month, year] = e.target.value.split('.');
+                if (day && month && year) {
+                  const parsedDate = new Date(`${year}-${month}-${day}`);
+                  if (!isNaN(parsedDate)) {
+                    setSelectedDate(parsedDate);
+                  }
+                }
               }}
+              placeholder="dd.MM.yyyy"
+              pattern="\d{2}\.\d{2}\.\d{4}"
               className="datepicker-input w-full border border-gray-300 p-2 rounded"
             />
           ) : (
