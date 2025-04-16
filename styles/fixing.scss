@@ -287,7 +287,7 @@
 	}
 
 	.fixing_section .table th {
-		font-size: 12px;
+		// font-size: 12px;
 		white-space: nowrap;
 		padding-right: 15px;
 	}
@@ -303,12 +303,13 @@
 	.table.fix_table {
 		thead tr {
 			display: grid;
-			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 			width: 100%;
 
 			th {
 				border: none;
-
+				padding: 5px 0;
+				&:first-child,
 				&:nth-child(7),
 				&:nth-child(8),
 				&:nth-child(9) {
@@ -319,9 +320,9 @@
 
 		tbody tr {
 			display: grid;
-			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 			width: 100%;
-			padding-bottom: 15px;
+			// padding-bottom: 15px;
 			// border-bottom: 1px solid #ccc;
 
 			&:last-child {
@@ -331,7 +332,9 @@
 
 			td {
 				border: none !important;
-
+				&:first-child{
+					display: none;
+				}
 				&:nth-child(7) {
 					grid-column-start: 1;
 					grid-column-end: 3;
@@ -344,13 +347,19 @@
 
 				&:nth-child(9) {
 					grid-column-start: 5;
-					grid-column-end: 7;
+					grid-column-end: 6;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
 				}
 			}
 		}
 
 		.fix-button {
 			width: 100%;
+			color: white;
+			max-width: 70px;
+			margin: 0;
 		}
 
 		&.now_ordered {

@@ -18,13 +18,14 @@ function SocketTable({ discount, userId }) {
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
-    const { activeFix, setActiveFix } = useContext(JsonContext);
+    const { activeFix, setActiveFix, totalPrice } = useContext(JsonContext);
 
     const [grams, setGrams] = useState({ 1: null, 2: null });
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
     const [fixLoading, setFixLoading] = useState({});
     const [successId, setSuccessId] = useState(null);
+    const [fixedValue, setFixedValue] = useState(null);
     const [yesterdayPrices, setYesterdayPrices] = useState([]);
 
     const locationData = useSelector(getLocationData);
@@ -86,7 +87,7 @@ function SocketTable({ discount, userId }) {
 
 
     const handleGramsChange = (id, value) => {
-        if (value && value == '00') {
+        if (value && value == 0) {
             return
         }
 
@@ -168,7 +169,7 @@ function SocketTable({ discount, userId }) {
     }
 
     const handleFix = async (id) => {
-        if (grams[id] === 0 || grams[id] === '' || grams[id] === '0' || !grams[id]  ) {
+        if (grams[id] === 0 || grams[id] === '' || grams[id] === '0' || !grams[id]) {
             toast.error('Please enter grams');
             return
         }
@@ -200,6 +201,7 @@ function SocketTable({ discount, userId }) {
             const data = await request(`https://newapi.goldcenter.am/v1/preorder/calculate-amount`, 'POST', fixData);
             if (data) {
                 setSuccessId(id);
+                setFixedValue(usdValues[id]?.toFixed(2));
                 toast.success(`Successfully fixed ${grams[id]} grams of ${id === 1 ? '999' : '995'} purity gold`);
                 setFixLoading((prev) => ({ ...prev, [id]: false }));
                 setActiveFix(!activeFix)
@@ -212,7 +214,8 @@ function SocketTable({ discount, userId }) {
 
     const closePopup = () => {
         setSuccessId(null);
-        setGrams({ 1: 0, 2: 0 });
+        setFixedValue(null);
+        setGrams({ 1: null, 2: null});
         setUsdValues({ 1: 0.00, 2: 0.00 });
     }
 
@@ -290,13 +293,13 @@ function SocketTable({ discount, userId }) {
                         <div className='popup_content'>
                             <span><b>ՇՆՈՐՀԱԿԱԼՈՒԹՅՈՒՆ</b></span>
                             <p>Դուք պատվիրել եք՝ </p>
-                            <p><b>{grams[successId]}</b> գրամ <b>{tableData[successId - 1]?.purity}</b> ոսկի <b>{usdValues[successId]?.toFixed(2)}</b> փոխարժեքով</p>
+                            <p><b>{grams[successId]}</b> գրամ <b>{tableData[successId - 1]?.purity}</b> ոսկի <b>{fixedValue}</b> փոխարժեքով</p>
                             <p><b>{locationData.date}</b> ժամը <b>{locationData?.selectedHour + ':' + locationData?.selectedMinute}</b> ին:</p>
                             <br />
                             <p>Վերապահված է 24 ժամով</p>
                             <p><b>{locationData.selectedLocation?.label} </b>հասցեում</p>
                             <br />
-                            <p>ընդհանուր պարտքը՝ = <b>${usdValues[successId].toFixed(2)}</b> դոլար</p>
+                            <p>ընդհանուր պարտքը՝ = <b>${totalPrice.toFixed(2) || usdValues[successId].toFixed(2)}</b> դոլար</p>
                         </div>
                         <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>
                     </div>

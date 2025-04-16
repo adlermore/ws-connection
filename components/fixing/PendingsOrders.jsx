@@ -12,8 +12,8 @@ import { JsonContext } from '@/context/jsonContext';
 
 function PendingsOrders({ userId }) {
 
-  const {activeFix} = useContext(JsonContext);
-
+  const {activeFix, settotalPrice} = useContext(JsonContext);
+  
   const [pendingOrders, setPendingOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingOrder, setEditingOrder] = useState(null);
@@ -82,6 +82,13 @@ function PendingsOrders({ userId }) {
   const totalGrams = pendingOrders.reduce((acc, order) => acc + order.grams, 0);
   const totalPrice = pendingOrders.reduce((acc, order) => acc + order.price, 0);
   const averagePrice = totalGrams ? (totalPrice / totalGrams) : 0;
+
+  useEffect(()=>{
+    if(totalPrice){
+      settotalPrice(totalPrice)
+    }
+  },[totalPrice])
+  
 
   const getFormattedDate = () => {
     const today = new Date();
