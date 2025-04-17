@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -11,9 +11,10 @@ import Cookies from 'js-cookie';
 import { setAuthenticated } from '@/redux/authSlice';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { JsonContext } from '@/context/jsonContext';
 
 
-function Locations({ modalMode, editingOrder }) {
+function Locations({ modalMode }) {
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -22,7 +23,8 @@ function Locations({ modalMode, editingOrder }) {
   const [minutes, setMinutes] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [rememberLocation, setRememberLocation] = useState(false);
+  const { rememberLocation, setRememberLocation } = useContext(JsonContext);
+
   const [isMobile, setIsMobile] = useState(false);
   const workingHourStart = 9;
   const workingHourEnd = 18;
@@ -111,7 +113,7 @@ function Locations({ modalMode, editingOrder }) {
     try {
       const data = await request('https://newapi.goldcenter.am/v1/preorder/current-user-location');
       if (data && data.location_id) {
-        
+
         const defaultLocation = locationOptions.find(option => option.value === data.location_id);
         if (defaultLocation) {
           setSelectedLocation(defaultLocation);

@@ -10,6 +10,7 @@ const JsonContextProvider = ({ children }) => {
   const [activeLg, setActiveLg] = useState("en-Us"); 
   const [activeFix, setActiveFix] = useState(false); 
   const [totalPrice, settotalPrice] = useState(false); 
+  const [rememberLocation, setRememberLocation] = useState(false);
 
   useEffect(() => {
     
@@ -29,6 +30,7 @@ const JsonContextProvider = ({ children }) => {
       value={{
         silverMode, setSilverMode,
         activeFix,setActiveFix,
+        rememberLocation,setRememberLocation,
         currency, setCurrency,
         totalPrice,settotalPrice,
         activeLg , setActiveLg

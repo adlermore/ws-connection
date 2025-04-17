@@ -1,3 +1,4 @@
+'use client'
 import LoginPopup from '../(auth)/components/login/LoginPopup'
 import fixingLogo from '@/public/images/fixing_logo.png'
 import Image from 'next/image';

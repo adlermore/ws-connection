@@ -18,7 +18,7 @@ function SocketTable({ discount, userId }) {
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
-    const { activeFix, setActiveFix, totalPrice } = useContext(JsonContext);
+    const { activeFix, setActiveFix, totalPrice, rememberLocation } = useContext(JsonContext);
 
     const [grams, setGrams] = useState({ 1: null, 2: null });
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
@@ -192,7 +192,7 @@ function SocketTable({ discount, userId }) {
             grams995: id === 2 ? parseFloat(grams[2]) : 0,
             price999: id === 1 ? parseFloat(usdValues[1]) : 0,
             price995: id === 2 ? parseFloat(usdValues[2]) : 0,
-            remember: false,
+            remember: rememberLocation,
             key: encryptedText,
             iv: ivBase64,
         }
@@ -215,7 +215,7 @@ function SocketTable({ discount, userId }) {
     const closePopup = () => {
         setSuccessId(null);
         setFixedValue(null);
-        setGrams({ 1: null, 2: null});
+        setGrams({ 1: null, 2: null });
         setUsdValues({ 1: 0.00, 2: 0.00 });
     }
 
