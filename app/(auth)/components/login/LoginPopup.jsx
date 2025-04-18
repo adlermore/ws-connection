@@ -70,13 +70,13 @@ function LoginPopup() {
         ref={ref}
       >
         <div className="title_line  w-full gap-10">
-          <div className="popup_title text-[24px] uppercase mobile:text-xl ">Sign in</div>
+          <div className="popup_title text-[24px] uppercase mobile:text-xl ">Մուտք</div>
           <div className="mt-[25px] text-[16px] mobile:mt-15 mobile:text-sm">
-            Sign in to view your order history an update your details
+            Մուտք գործեք ձեր հաշիվ ,որպեսզի կարողանաք օգտվել բոլոր հնարավորություններից
           </div>
           {status === "failed" && (
             <div className="text-siteRed text-center">
-              Incorrect Email or Password
+              Սխալ մուտքագրված էլ. փոստ կամ գաղտնաբառ
             </div>
           )}
         </div>
@@ -87,7 +87,7 @@ function LoginPopup() {
                 errorsLogin?.email ? "form_block has_error" : "form_block"
               }
             >
-              <div className="loginForm_label text-light mb-[5px]">Email</div>
+              <div className="loginForm_label text-light mb-[5px]">Էլ․ փոստ</div>
               <input
                 placeholder="Enter your email address"
                 autoComplete="on"
@@ -108,7 +108,7 @@ function LoginPopup() {
               }
             >
               <div className="loginForm_label text-base font-light mb-[5px]">
-                Password
+                Գաղտնաբառ
               </div>
               <input
                 placeholder="Enter password"
@@ -126,23 +126,23 @@ function LoginPopup() {
               <label htmlFor="checkbox1">
                 <input type="checkbox" id="checkbox1" onChange={passToggle} />
                 <span className="square_block"></span>
-                <span className="check_label">Show Password</span>
+                <span className="check_label">Տեսնել գաղտնաբառը</span>
               </label>
             </div>
             <div className="checkbox_line mt-[5px] mb-[20px]">
               <label htmlFor="checkbox2">
                 <input type="checkbox" id="checkbox2" />
                 <span className="square_block"></span>
-                <span className="check_label ">Remember Me</span>
+                <span className="check_label ">Պահպանել</span>
               </label>
             </div>
             <button
               type="submit"
               className={`${status === "loading" ? 'pointer-events-none' : ''}  relative submit_btn h-[40px] w-full bg-siteCrem text-base font-semibold text-white duration-300 hover:opacity-70 mx-auto justify-center flex items-center`}
             >
-              {status === "loading" ? <span className="loader_spinner"></span> : " Login"}
+              {status === "loading" ? <span className="loader_spinner"></span> : " Մուտք գործել"}
             </button>
-            <div className="mt-[20px] pointer-events-none flex mobile:text-sm items-center justify-center gap-[20px]">Dont have an account ? <Link href="/register" className="font-bold">Register Now</Link></div>
+            <div className="mt-[20px] pointer-events-none flex mobile:text-sm items-center justify-center gap-[20px]">Չունեք Հաշիվ՞ <Link href="/register" className="font-bold">Գրանցվել Հիմա</Link></div>
           </form>
         </div>
       </div>

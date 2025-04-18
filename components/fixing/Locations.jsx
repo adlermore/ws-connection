@@ -177,7 +177,7 @@ function Locations({ modalMode }) {
     <>
       <div className={`${modalMode ? 'modalMode' : ''} flex location_wrapper justify-between location_section items-center mt-[50px] border-t pt-6 tablet:mt-[30px] tablet:pt-[30px] mobile:pt-[20px] mobile:flex-col-reverse gap-[10px]`}>
         <div className='select-container max-w-[400px] mobile:max-w-none w-full'>
-          <label htmlFor="location-select">Select Location:</label>
+          <label htmlFor="location-select">Ընտրեք մասնաճյուղը:</label>
           <Select
             id="location-select"
             options={locationOptions}
@@ -187,7 +187,7 @@ function Locations({ modalMode }) {
           />
         </div>
         <div className="datepicker-container mobile:order-1 max-w-[400px] w-full mobile:max-w-none flex flex-col">
-          <label htmlFor="date-picker">Select Date:</label>
+          <label htmlFor="date-picker">Ընտրեք օրը:</label>
           {isMobile ? (
             <input
               type="date"
@@ -225,7 +225,7 @@ function Locations({ modalMode }) {
           )}
         </div>
         <div className="time-select-container mobile:w-full mobile:max-w-none mobile:col-span-1">
-          <label htmlFor="time-select">Time:</label>
+          <label htmlFor="time-select">Ընտրեք Ժամը:</label>
           <div className="flex mobile:flex-1 mobile:grid mobile:grid-cols-1 gap-[10px] mobile:w-full">
             {isMobile ? (
               <input
@@ -272,7 +272,7 @@ function Locations({ modalMode }) {
           className='cursor-pointer'
           onChange={() => setRememberLocation(!rememberLocation)}
         />
-        <label htmlFor="remimber_lavel" className='cursor-pointer'>Remember</label>
+        <label htmlFor="remimber_lavel" className='cursor-pointer'>Հիշել </label>
       </div>
     </>
   );

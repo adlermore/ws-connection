@@ -3,9 +3,9 @@ import Select from 'react-select';
 import { request } from '../request';
 
 const FILTER_OPTIONS = [
-  { value: 'today', label: 'Today' },
-  { value: 'yesterday', label: 'Yesterday' },
-  { value: 'last7days', label: 'Last 7 Days' },
+  { value: 'today', label: 'Այսօր' },
+  { value: 'yesterday', label: 'Երեկ' },
+  { value: 'last7days', label: 'Վերջին 7 օր' },
 ];
 
 function formatDate(date) {
@@ -104,7 +104,7 @@ function OrderHistory({ userId }) {
 
   return (
     <div className='mt-[80px] mb-[80px] mobile:mt-[40px] mobile:mb-[40px] order_history'>
-      <h2 className='text-center text-2xl mobile:text-xl'>COMPLETED ORDERS</h2>
+      <h2 className='text-center text-2xl mobile:text-xl'>ԱՎԱՐՏՎԱԾ ՊԱՏՎԵՐՆԵՐ</h2>
       <div className='mx-auto max-w-[400px] mt-[30px] mb-[40px]'>
         <Select
           options={FILTER_OPTIONS}
@@ -114,19 +114,19 @@ function OrderHistory({ userId }) {
         />
       </div>
       {orders.length === 0 ? (
-        <p>No orders found.</p>
+        <p>Պատվերներ չեն գտնվել:</p>
       ) : (
         <div className='table-wrapper'>
           <table className='table  scroll-table ' border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Grams</th>
-                <th>Price</th>
-                <th>Carat</th>
-                <th>Status</th>
-                <th>Location</th>
-                <th>Created At</th>
+                <th>Քաշ</th>
+                <th>Գին</th>
+                <th>Հարգ</th>
+                <th>Կարգավիճակ</th>
+                <th>Մասնաճյուղ</th>
+                <th>Ստեղծվել է</th>
               </tr>
             </thead>
             <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>

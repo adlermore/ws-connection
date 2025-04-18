@@ -169,7 +169,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
-        toast.success("Login successful!"); 
+        toast.success("Դուք հաջողությամբ մուտք գործեցիք:");
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";        

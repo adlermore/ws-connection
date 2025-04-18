@@ -152,20 +152,20 @@ function PendingsOrders({ userId }) {
         {pendingOrders.length > 0 && (
           <div>
             <div className="mt-[50px]">
-              <h2 className="text-[20px] font-semibold mb-4">PENDING ORDERS</h2>
+              <h2 className="text-[20px] font-semibold mb-4">ՍՊԱՍՎԱԾ ՊԱՏՎԵՐՆԵՐ</h2>
               <div className="table-wrapper">
                 <table className="w-full table now_ordered border scroll-table border-gray-300">
                   <thead className="bg-gray-100">
                     <tr>
                       <th className="py-2 px-4 text-left"></th>
-                      <th className="py-2 px-4 text-left">PURITY</th>
-                      <th className="py-2 px-4 text-left">USD</th>
-                      <th className="py-2 px-4 text-left">Gram</th>
-                      <th className="py-2 px-4 text-left">Amount</th>
-                      <th className="py-2 px-4 text-left">Location</th>
-                      <th className="py-2 px-4 text-left">Date</th>
-                      <th className="py-2 px-4 text-left">Time</th>
-                      <th className="py-2 px-4 text-left">Actions</th>
+                      <th className="py-2 px-4 text-left">Հարգ</th>
+                      <th className="py-2 px-4 text-left">Գին</th>
+                      <th className="py-2 px-4 text-left">Քաշ</th>
+                      <th className="py-2 px-4 text-left">Ընդ Արժեք</th>
+                      <th className="py-2 px-4 text-left">Մասնաճյուղ</th>
+                      <th className="py-2 px-4 text-left">Օր</th>
+                      <th className="py-2 px-4 text-left">Ժամ</th>
+                      <th className="py-2 px-4 text-left">Գործողություն</th>
                     </tr>
                   </thead>
                   <tbody className={loading ? 'skeleton_active' : 'default_tbody'}>
@@ -192,7 +192,7 @@ function PendingsOrders({ userId }) {
                               }}
                               className="text-blue-500 edit_button"
                             >
-                              Edit
+                              Փոխել
                             </button>
                           </td>
                         </tr>
@@ -205,7 +205,7 @@ function PendingsOrders({ userId }) {
           </div>
         )}
         {showModal && (
-          <Modal title="Edit Fixed Order" onClose={() => setShowModal(false)}>
+          <Modal title="Փոխել Տվյալները" onClose={() => setShowModal(false)}>
             <Locations modalMode={true} editingOrder={editingOrder} />
             <div className="flex justify-end mt-4">
               <button
@@ -216,7 +216,7 @@ function PendingsOrders({ userId }) {
                 }}
                 className={`bg-siteCrem save_btn text-white px-4 py-2 rounded ${updateLoading ? 'pointer-events-none' : ''}`}
               >
-                {updateLoading ? <span className="loader_spinner"></span> : 'Save Changes'}
+                {updateLoading ? <span className="loader_spinner"></span> : 'Պահպանել'}
               </button>
             </div>
           </Modal>

@@ -71,7 +71,7 @@ function SocketTable({ discount, userId }) {
                     buyPrice: item.buy.toFixed(2),
                     sellPrice: sellPrice.toFixed(2),
                     change,
-                    time: new Date().toLocaleTimeString()
+                    time: new Date().toLocaleTimeString([], { hour12: false })
                 };
             });
 
@@ -123,7 +123,7 @@ function SocketTable({ discount, userId }) {
                     buyPrice: item.buy.toFixed(2),
                     sellPrice: sellPrice.toFixed(2),
                     change,
-                    time: new Date().toLocaleTimeString()
+                    time: new Date().toLocaleTimeString([], { hour12: false })
                 };
             });
 
@@ -225,13 +225,13 @@ function SocketTable({ discount, userId }) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th>PURITY</th>
-                        <th>BUY</th>
-                        <th>SELL</th>
-                        <th>CHANGE</th>
-                        <th>TIME</th>
-                        <th className='gram_th'>GRAMS</th>
-                        <th className='usd_th'>USD</th>
+                        <th>Հարգ</th>
+                        <th>Առք</th>
+                        <th>Վաճառք</th>
+                        <th>Տարբերություն</th>
+                        <th>Ժամ</th>
+                        <th className='gram_th'>Քաշ</th>
+                        <th className='usd_th'>Գին</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -249,7 +249,7 @@ function SocketTable({ discount, userId }) {
                                     type="number"
                                     value={grams[item.id] ?? ''}
                                     onChange={(e) => handleGramsChange(item.id, e.target.value)}
-                                    placeholder='Enter Grams'
+                                    placeholder='Գրամ'
                                     className="grams-input"
                                 />
                             </td>

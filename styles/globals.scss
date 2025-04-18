@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,6 +25,7 @@ body {
   background: #F2EDE4;
   transition: background 0.3s;
   overflow-x: hidden !important;
+  font-family: 'Noto Sans Armenian', sans-serif;
 
   &.menu_opened {
     overflow: hidden !important;
@@ -2618,12 +2620,26 @@ input::-webkit-inner-spin-button {
   }
 }
 
+.fixing_section {
+  .location_wrapper {
+    padding-top: 0;
+    label{
+      margin-bottom: 5px;
+      display: block;
+    }
+  }
+}
 @media (max-width: 575px) {
 
   .account_toggle .drop_ist {
     top: calc(100% + 10px);
   }
-
+  .amount_wrapper {
+    padding: 0 5px;
+    > div{
+      justify-content: space-between;
+    }
+  }
   .header_wrapper {
     position: relative;
     top: 0;
@@ -2644,7 +2660,6 @@ input::-webkit-inner-spin-button {
   .fixing_section {
     .location_wrapper {
       padding-top: 0;
-
       >div {
         margin-bottom: 10px;
       }
