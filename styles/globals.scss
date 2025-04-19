@@ -2638,6 +2638,12 @@ input::-webkit-inner-spin-button {
     padding: 0 5px;
     > div{
       justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      span{
+        padding-left: 20px;
+      }
     }
   }
   .header_wrapper {
