@@ -8,11 +8,11 @@ import Modal from '../ui/Modal';
 import Locations from './Locations';
 import IconCalendar from "@/public/icons/IconCalendar";
 import IconTime from "@/public/icons/IconTime";
-import { JsonContext } from '@/context/jsonContext';
+import { FixContext } from '@/context/fixContext';
 
 function PendingsOrders({ userId }) {
 
-  const {activeFix, settotalPrice} = useContext(JsonContext);
+  const {activeFix, settotalPrice} = useContext(FixContext);
   
   const [pendingOrders, setPendingOrders] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -6,14 +6,11 @@ const JsonContext = createContext();
 
 const JsonContextProvider = ({ children }) => {
   const [silverMode, setSilverMode] = useState(false);
-  const [currency, setCurrency ] = useState('amd');
-  const [activeLg, setActiveLg] = useState("en-Us"); 
-  const [activeFix, setActiveFix] = useState(false); 
-  const [totalPrice, settotalPrice] = useState(false); 
-  const [rememberLocation, setRememberLocation] = useState(false);
+  const [currency, setCurrency] = useState('amd');
+  const [activeLg, setActiveLg] = useState("en-Us");
 
   useEffect(() => {
-    
+
     if (silverMode) {
       document.body.classList.add("silverMode");
     } else {
@@ -23,17 +20,14 @@ const JsonContextProvider = ({ children }) => {
     return () => {
       document.body.classList.remove("silverMode");
     };
-  }, [silverMode , activeLg]);
+  }, [silverMode, activeLg]);
 
   return (
     <JsonContext.Provider
       value={{
         silverMode, setSilverMode,
-        activeFix,setActiveFix,
-        rememberLocation,setRememberLocation,
         currency, setCurrency,
-        totalPrice,settotalPrice,
-        activeLg , setActiveLg
+        activeLg, setActiveLg
       }}
     >
       {children}

@@ -11,8 +11,7 @@ import Cookies from 'js-cookie';
 import { setAuthenticated } from '@/redux/authSlice';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { JsonContext } from '@/context/jsonContext';
-
+import { FixContext } from '@/context/fixContext';
 
 function Locations({ modalMode }) {
 
@@ -23,7 +22,7 @@ function Locations({ modalMode }) {
   const [minutes, setMinutes] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const { rememberLocation, setRememberLocation } = useContext(JsonContext);
+  const { rememberLocation, setRememberLocation } = useContext(FixContext);
 
   const [isMobile, setIsMobile] = useState(false);
   const workingHourStart = 9;

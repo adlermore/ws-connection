@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import RegisterPopup from '../(auth)/components/register/RegisterPopup'
+import RegisterPopup from '../components/register/RegisterPopup'
 
 function Register() {
   return (

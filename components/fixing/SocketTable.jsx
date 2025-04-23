@@ -9,8 +9,9 @@ import { useSelector } from 'react-redux';
 import { getLocationData } from '@/redux/locationSlice';
 import fixingLogo from '@/public/images/fixing_logo.png';
 import successLogo from '@/public/images/success_svg.png';
+import failedLogo from '@/public/images/failed_logo.png';
 import Image from 'next/image';
-import { JsonContext } from '@/context/jsonContext';
+import { FixContext } from '@/context/fixContext';
 
 function SocketTable({ discount, userId }) {
 
@@ -18,13 +19,14 @@ function SocketTable({ discount, userId }) {
         { id: 1, purity: '999.9', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
         { id: 2, purity: '995', buyPrice: '-', sellPrice: '-', change: '-', time: '-' },
     ]);
-    const { activeFix, setActiveFix, totalPrice, rememberLocation } = useContext(JsonContext);
+    const { activeFix, setActiveFix, totalPrice, rememberLocation } = useContext(FixContext);
 
     const [grams, setGrams] = useState({ 1: null, 2: null });
     const [usdValues, setUsdValues] = useState({ 1: 0.00, 2: 0.00 });
     const [loading, setLoading] = useState(true);
     const [fixLoading, setFixLoading] = useState({});
     const [successId, setSuccessId] = useState(null);
+    const [failedFix, setfailedFix] = useState(false);
     const [fixedValue, setFixedValue] = useState(null);
     const [yesterdayPrices, setYesterdayPrices] = useState([]);
 
@@ -206,7 +208,9 @@ function SocketTable({ discount, userId }) {
                 setFixLoading((prev) => ({ ...prev, [id]: false }));
                 setActiveFix(!activeFix)
             }
+
         } catch (error) {
+            setfailedFix(id)
             console.error('Error fetching user discount:', error);
             setFixLoading((prev) => ({ ...prev, [id]: false }));
         }
@@ -214,6 +218,7 @@ function SocketTable({ discount, userId }) {
 
     const closePopup = () => {
         setSuccessId(null);
+        setfailedFix(false)
         setFixedValue(null);
         setGrams({ 1: null, 2: null });
         setUsdValues({ 1: 0.00, 2: 0.00 });
@@ -300,6 +305,44 @@ function SocketTable({ discount, userId }) {
                             <p><b>{locationData.selectedLocation?.label} </b>հասցեում</p>
                             <br />
                             <p>ընդհանուր պարտքը՝ = <b>${totalPrice.toFixed(2) || usdValues[successId].toFixed(2)}</b> դոլար</p>
+                        </div>
+                        <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>
+                    </div>
+                </div>
+            }
+            {failedFix &&
+                <div className='success_popup failed_fix_popup'>
+                    <div className='popup_inner'>
+                        <div className='popup_image'>
+                            <Image
+                                width={228}
+                                height={53}
+                                src={fixingLogo}
+                                unoptimized={true}
+                                alt="Fixing Logo"
+                                priority={true}
+                            />
+                        </div>
+                        <div className='success_svg'>
+                            <Image
+                                width={190}
+                                height={35}
+                                src={failedLogo}
+                                unoptimized={true}
+                                alt="Fixing Logo"
+                                priority={true}
+                            />
+                        </div>
+
+                        <div className='popup_content'>
+                            <span><b>ՈՒՇԱԴՐՈՒԹՅՈՒՆ</b></span>
+                            <p>պատվերի հետ կապված խնդիր է տեղի ունեցել</p>
+                            <p><b>${parseFloat(usdValues[failedFix]) }</b>-ը մեր ընթացիկ  փոխարժեքը չէ</p>
+                            <br />
+                            <p>խնդրում ենք նորից փորձել</p>
+                            <p>շնորհակալություն</p>
+                            <br />
+                            <p>ընդհանուր պարտքը՝ = <b>$00․00</b> դոլար</p>
                         </div>
                         <button className='popop_btn' onClick={closePopup}>ԼԱՎ</button>
                     </div>
