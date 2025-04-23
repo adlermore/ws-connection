@@ -11,7 +11,7 @@ import fixingLogo from '@/public/images/fixing_logo.png';
 import successLogo from '@/public/images/success_svg.png';
 import failedLogo from '@/public/images/failed_logo.png';
 import Image from 'next/image';
-import { FixContext } from '@/context/fixContext';
+import { FixContext } from '@/context/FixContext';
 
 function SocketTable({ discount, userId }) {
 

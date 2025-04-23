@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { request } from "@/components/request";
 import OrderHistory from "@/components/fixing/OrderHistory";
 import PendingsOrders from "@/components/fixing/PendingsOrders";
-import { FixContextProvider } from "@/context/fixContext";
+import { FixContextProvider } from "@/context/FixContext";
 
 const LocationLoading = () => (
   <div className="flex justify-between location_section mobile:block items-center mt-[50px] border-t pt-6 gap-[10px]">

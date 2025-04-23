@@ -11,7 +11,7 @@ import Cookies from 'js-cookie';
 import { setAuthenticated } from '@/redux/authSlice';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { FixContext } from '@/context/fixContext';
+import { FixContext } from '@/context/FixContext';
 
 function Locations({ modalMode }) {
 

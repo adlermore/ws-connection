@@ -8,7 +8,7 @@ import Modal from '../ui/Modal';
 import Locations from './Locations';
 import IconCalendar from "@/public/icons/IconCalendar";
 import IconTime from "@/public/icons/IconTime";
-import { FixContext } from '@/context/fixContext';
+import { FixContext } from '@/context/FixContext';
 
 function PendingsOrders({ userId }) {
 
