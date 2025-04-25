@@ -144,7 +144,6 @@ function OrderHistory({ userId }) {
             </tbody>
           </table>
         </div>
-
       )}
     </div>
   );

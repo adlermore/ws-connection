@@ -56,7 +56,7 @@ function SocketTable({ discount, userId }) {
 
     const fetchLocalSocket = async (yesterdayPricesData) => {
         try {
-            const response = await fetch('https://api.goldcenter.am/v1/rate/local_socket?month=1');
+            const response = await fetch('https://newapi.goldcenter.am/v1/rate/local_socket?month=1');
             const { data } = await response.json();
 
             if (!yesterdayPricesData) {
@@ -102,7 +102,7 @@ function SocketTable({ discount, userId }) {
 
     useEffect(() => {
         const fetchYesterdayPrices = async () => {
-            const response = await fetch('https://api.goldcenter.am/v1/rate/local-yesterday-socket');
+            const response = await fetch('https://newapi.goldcenter.am/v1/rate/local-yesterday-socket');
             const data = await response.json();
             setYesterdayPrices(data);
             await fetchLocalSocket(data);
@@ -110,7 +110,7 @@ function SocketTable({ discount, userId }) {
 
         fetchYesterdayPrices();
 
-        ws.current = new WebSocket('wss://api.goldcenter.am/v1/rate/vue-websocket');
+        ws.current = new WebSocket('wss://newapi.goldcenter.am/v1/rate/vue-websocket');
         ws.current.onmessage = (event) => {
             const data = JSON.parse(event.data);
             const parsedLrs = JSON.parse(data.lrs);
@@ -337,7 +337,7 @@ function SocketTable({ discount, userId }) {
                         <div className='popup_content'>
                             <span><b>ՈՒՇԱԴՐՈՒԹՅՈՒՆ</b></span>
                             <p>պատվերի հետ կապված խնդիր է տեղի ունեցել</p>
-                            <p><b>${parseFloat(usdValues[failedFix]) }</b>-ը մեր ընթացիկ  փոխարժեքը չէ</p>
+                            <p><b>${parseFloat(usdValues[failedFix])}</b>-ը մեր ընթացիկ  փոխարժեքը չէ</p>
                             <br />
                             <p>խնդրում ենք նորից փորձել</p>
                             <p>շնորհակալություն</p>
