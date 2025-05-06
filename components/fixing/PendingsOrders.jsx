@@ -158,13 +158,13 @@ function PendingsOrders({ userId }) {
                   <thead className="bg-gray-100">
                     <tr>
                       <th className="py-2 px-4 text-left"></th>
-                      <th className="py-2 px-4 text-left">Հարգ</th>
-                      <th className="py-2 px-4 text-left">Գին</th>
-                      <th className="py-2 px-4 text-left">Քաշ</th>
-                      <th className="py-2 px-4 text-left">Ընդ Արժեք</th>
+                      <th className="py-2 px-4 text-left">Հարգը</th>
+                      <th className="py-2 px-4 text-left">Գինը</th>
+                      <th className="py-2 px-4 text-left">Քաշը</th>
+                      <th className="py-2 px-4 text-left">Ընդ Արժեքը</th>
                       <th className="py-2 px-4 text-left">Մասնաճյուղ</th>
-                      <th className="py-2 px-4 text-left">Օր</th>
-                      <th className="py-2 px-4 text-left">Ժամ</th>
+                      <th className="py-2 px-4 text-left">Օրը</th>
+                      <th className="py-2 px-4 text-left">Ժամը</th>
                       <th className="py-2 px-4 text-left">Գործողություն</th>
                     </tr>
                   </thead>

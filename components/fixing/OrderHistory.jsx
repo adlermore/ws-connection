@@ -121,9 +121,9 @@ function OrderHistory({ userId }) {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Քաշ</th>
-                <th>Գին</th>
-                <th>Հարգ</th>
+                <th>Քաշը</th>
+                <th>Գինը</th>
+                <th>Հարգը</th>
                 <th>Կարգավիճակ</th>
                 <th>Մասնաճյուղ</th>
                 <th>Ստեղծվել է</th>

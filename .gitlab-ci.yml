@@ -1,0 +1,14 @@
+include:
+  - project: 'goldcentr/ci-templates'
+    file: 'docker-build-new.yml'
+  - project: 'goldcentr/ci-templates'
+    file: 'docker-deploy-new.yml'
+
+build branch:
+  extends: .template_branch_build
+
+build tag:
+  extends: .template_tag_build
+
+deploy:
+  extends: .template_deploy

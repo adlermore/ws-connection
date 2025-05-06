@@ -65,7 +65,7 @@ function SocketTable({ discount, userId }) {
             const updatedData = data.slice(0, 2).map((item, idx) => {
                 const yesterday = yesterdayPricesData.find(y => y.rate_id === idx + 1)
 
-                const sellPrice = item.sell - (idx === 0 ? discount?.discount || 0 : discount?.discount995 || 0);
+                const sellPrice = item.sell - (idx === 0 ? discount?.discount || 0 : discount?.discount || 0);
                 const change = yesterday ? getChangeSymbol(sellPrice, yesterday.yesterday_sell_value) : '-';
 
                 return {
@@ -117,7 +117,7 @@ function SocketTable({ discount, userId }) {
 
             const updatedData = parsedLrs.map((item, idx) => {
                 const yesterday = yesterdayPrices.find(y => y.rate_id === idx + 1);
-                const sellPrice = item.sell - (idx === 0 ? discount?.discount || 0 : discount?.discount995 || 0);
+                const sellPrice = item.sell - (idx === 0 ? discount?.discount || 0 : discount?.discount || 0);
                 const change = yesterday ? getChangeSymbol(sellPrice, yesterday.yesterday_sell_value) : '-';
 
                 return {
@@ -230,13 +230,13 @@ function SocketTable({ discount, userId }) {
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Հարգ</th>
+                        <th>Հարգը</th>
                         <th>Առք</th>
                         <th>Վաճառք</th>
-                        <th>Տարբերություն</th>
-                        <th>Ժամ</th>
-                        <th className='gram_th'>Քաշ</th>
-                        <th className='usd_th'>Գին</th>
+                        <th>+/-</th>
+                        <th>Ժաը</th>
+                        <th className='gram_th'>Քաշը</th>
+                        <th className='usd_th'>Գինը</th>
                         <th></th>
                     </tr>
                 </thead>
